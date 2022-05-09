@@ -20,7 +20,16 @@
       </button>
     </div>
     <div>
-      <button @click="doCreate">Packing List 생성</button>
+      <button class="btn btn-danger me-1" @click="$refs.file.click()">
+        엑셀업로드
+      </button>
+      <input
+        type="file"
+        style="display: none"
+        ref="file"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        @change="uploadExcel($event.target.files)"
+      />
     </div>
     <!-- 신규 고객사 등록 모달 -->
     <div>
@@ -83,7 +92,8 @@ export default {
       selectedCustomer: '',
       newCustomer: '',
       pureCustomers: [],
-      deleteCustomers: []
+      deleteCustomers: [],
+      excelList: []
     }
   },
   watch: {
@@ -102,8 +112,10 @@ export default {
   },
   unmounted() {},
   methods: {
-    doCreate() {
-      console.log(this.lotNo, this.selectedCustomer)
+    async uploadExcel(files) {
+      this.excelList = await this.$upload('/api/upload/excel', files[0])
+      console.log(this.excelList)
+      this.$refs.file.value = ''
     },
     addCustomer() {
       this.customers.push(this.newCustomer)

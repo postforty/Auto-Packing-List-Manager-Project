@@ -1,4 +1,4 @@
-// import axios from 'axios'
+import axios from 'axios'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
@@ -34,6 +34,19 @@ export default {
     //     console.log(e)
     //   })
     // },
+    async $upload(url, file) {
+      const formData = new FormData()
+      formData.append('attachment', file)
+      return (
+        await axios
+          .post(url, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
+          .catch((e) => {
+            console.log(e)
+          })
+      ).data
+    },
     async $ExcelFromTable(
       header = [],
       rows = [],
