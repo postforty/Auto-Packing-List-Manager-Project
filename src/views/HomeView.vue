@@ -13,7 +13,10 @@
         </option>
       </select>
       <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        신규 고객사 추가
+        추가
+      </button>
+      <button data-bs-toggle="modal" data-bs-target="#delCustomerModal">
+        삭제
       </button>
     </div>
     <div>
@@ -42,6 +45,30 @@
         </template>
       </slot-modal>
     </div>
+    <!-- 고객사 삭제 모달 -->
+    <div>
+      <slot-modal modalId="delCustomerModal">
+        <template v-slot:title>고객사 삭제</template>
+        <template v-slot:body>
+          <div :key="customer" v-for="customer in pureCustomers">
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              :value="customer"
+              v-model="deleteCustomers"
+            />
+            {{ customer }}
+          </div>
+        </template>
+        <template v-slot:footer>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
+          </button>
+          <button class="btn btn-primary" @click="doDelete">삭제</button>
+        </template>
+      </slot-modal>
+    </div>
   </div>
 </template>
 <script>
@@ -52,12 +79,22 @@ export default {
     return {
       lotNo: '',
       customers: ['A사', 'B사', 'C사'],
+      // customers: [],
       selectedCustomer: '',
-      newCustomer: ''
+      newCustomer: '',
+      pureCustomers: [],
+      deleteCustomers: []
+    }
+  },
+  watch: {
+    customers: function () {
+      this.pureCustomers = this.customers.slice()
+      this.pureCustomers.shift()
     }
   },
   setup() {},
   created() {
+    this.pureCustomers = this.customers.slice()
     this.customers.unshift('고객사를 선택하세요')
   },
   mounted() {
@@ -71,6 +108,15 @@ export default {
     addCustomer() {
       this.customers.push(this.newCustomer)
       this.$refs.newCustomerModal.value = ''
+    },
+    doDelete() {
+      let tempCustomers = []
+      for (const customer of this.deleteCustomers) {
+        tempCustomers.push(this.customers.filter((c) => c !== customer))
+      }
+      this.customers = tempCustomers[0].slice()
+      tempCustomers = []
+      this.deleteCustomers = []
     }
   }
 }
