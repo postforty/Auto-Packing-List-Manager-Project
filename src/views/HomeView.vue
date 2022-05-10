@@ -23,7 +23,7 @@
       <button class="btn btn-danger me-1" @click="$refs.file.click()">
         엑셀업로드
       </button>
-      <button class="btn btn-danger me-1" @click="lotNoFilter">test</button>
+      <button class="btn btn-danger me-1" @click="lotNoFilter">조회</button>
       <input
         type="file"
         style="display: none"
@@ -97,6 +97,7 @@ export default {
       pureCustomers: [],
       deleteCustomers: [],
       resultXlsxToJson: [],
+      filteredLotNo: [],
       tempResults: {
         0: [
           44281.34101851852,
@@ -113,7 +114,21 @@ export default {
           'Admin'
         ],
         1: [
-          44281.34122685185,
+          44281.34101851852,
+          0,
+          'AISI 304',
+          10.4,
+          0,
+          10.4,
+          0,
+          ,
+          '1532',
+          '0.40',
+          'SOFT',
+          'Admin'
+        ],
+        2: [
+          44281.34101851852,
           0,
           'AISI 304',
           10.4,
@@ -122,6 +137,20 @@ export default {
           0,
           ,
           '1531',
+          '0.40',
+          'SOFT',
+          'Admin'
+        ],
+        3: [
+          44281.34122685185,
+          0,
+          'AISI 304',
+          10.4,
+          0,
+          10.4,
+          0,
+          ,
+          '1532',
           '0.40',
           'SOFT',
           'Admin'
@@ -163,7 +192,7 @@ export default {
           if (roa.length) tmpResult[sheetName] = roa
         })
         this.resultXlsxToJson = tmpResult['Weighing Data']
-        console.log(this.resultXlsxToJson)
+        // console.log(this.resultXlsxToJson)
       }
       reader.readAsArrayBuffer(file)
     },
@@ -180,10 +209,16 @@ export default {
       tempCustomers = []
       this.deleteCustomers = []
     },
-    lotNoFilter(lotNo) {
-      const filteredLotNo = []
-      console.log(this.tempResults[0][8])
-      console.log(filteredLotNo)
+    lotNoFilter() {
+      for (let tempResult in this.resultXlsxToJson) {
+        if (this.lotNo === '') {
+          console.log(this.resultXlsxToJson)
+        } else if (this.resultXlsxToJson[tempResult][8] === this.lotNo) {
+          this.filteredLotNo.push(this.resultXlsxToJson[tempResult])
+        }
+      }
+      console.log(this.filteredLotNo)
+      this.lotNo = ''
     }
   }
 }
