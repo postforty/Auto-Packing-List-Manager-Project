@@ -23,6 +23,7 @@
       <button class="btn btn-danger me-1" @click="$refs.file.click()">
         엑셀업로드
       </button>
+      <button class="btn btn-danger me-1" @click="lotNoFilter">test</button>
       <input
         type="file"
         style="display: none"
@@ -81,6 +82,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import SlotModal from '@/components/fragments/SlotModal.vue'
 import XLSX from 'xlsx'
 export default {
@@ -94,7 +96,37 @@ export default {
       newCustomer: '',
       pureCustomers: [],
       deleteCustomers: [],
-      result: []
+      resultXlsxToJson: [],
+      tempResults: {
+        0: [
+          44281.34101851852,
+          0,
+          'AISI 304',
+          10.4,
+          0,
+          10.4,
+          0,
+          ,
+          '1531',
+          '0.40',
+          'SOFT',
+          'Admin'
+        ],
+        1: [
+          44281.34122685185,
+          0,
+          'AISI 304',
+          10.4,
+          0,
+          10.4,
+          0,
+          ,
+          '1531',
+          '0.40',
+          'SOFT',
+          'Admin'
+        ]
+      }
     }
   },
   watch: {
@@ -113,7 +145,7 @@ export default {
   },
   unmounted() {},
   methods: {
-    /* eslint-disable */
+    // xlsx to json
     readFile(event) {
       // get File object from input tag
       const file = event.target.files[0]
@@ -130,8 +162,8 @@ export default {
           })
           if (roa.length) tmpResult[sheetName] = roa
         })
-        this.result = tmpResult['Weighing Data']
-        console.log(this.result)
+        this.resultXlsxToJson = tmpResult['Weighing Data']
+        console.log(this.resultXlsxToJson)
       }
       reader.readAsArrayBuffer(file)
     },
@@ -147,6 +179,11 @@ export default {
       this.customers = tempCustomers[0].slice()
       tempCustomers = []
       this.deleteCustomers = []
+    },
+    lotNoFilter(lotNo) {
+      const filteredLotNo = []
+      console.log(this.tempResults[0][8])
+      console.log(filteredLotNo)
     }
   }
 }
