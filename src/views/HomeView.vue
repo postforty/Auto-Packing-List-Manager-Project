@@ -28,7 +28,7 @@
         style="display: none"
         ref="file"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-        @change="uploadExcel($event.target.files)"
+        @change="readFile"
       />
     </div>
     <!-- 신규 고객사 등록 모달 -->
@@ -82,6 +82,7 @@
 </template>
 <script>
 import SlotModal from '@/components/fragments/SlotModal.vue'
+import XLSX from 'xlsx'
 export default {
   components: { SlotModal },
   data() {
@@ -93,7 +94,7 @@ export default {
       newCustomer: '',
       pureCustomers: [],
       deleteCustomers: [],
-      excelList: []
+      result: []
     }
   },
   watch: {
@@ -112,10 +113,27 @@ export default {
   },
   unmounted() {},
   methods: {
-    async uploadExcel(files) {
-      this.excelList = await this.$upload('/api/upload/excel', files[0])
-      console.log(this.excelList)
-      this.$refs.file.value = ''
+    /* eslint-disable */
+    readFile(event) {
+      // get File object from input tag
+      const file = event.target.files[0]
+      const fileName = file.name // declare FileReader, temp result
+      const reader = new FileReader()
+      let tmpResult = {} // if you use "this", don't use "function(e) {...}"
+      reader.onload = (e) => {
+        let data = e.target.result
+        data = new Uint8Array(data) // get excel file
+        let excelFile = XLSX.read(data, { type: 'array' }) // get prased object
+        excelFile.SheetNames.forEach(function (sheetName) {
+          const roa = XLSX.utils.sheet_to_json(excelFile.Sheets[sheetName], {
+            header: 1
+          })
+          if (roa.length) tmpResult[sheetName] = roa
+        })
+        this.result = tmpResult['Weighing Data']
+        console.log(this.result)
+      }
+      reader.readAsArrayBuffer(file)
     },
     addCustomer() {
       this.customers.push(this.newCustomer)
