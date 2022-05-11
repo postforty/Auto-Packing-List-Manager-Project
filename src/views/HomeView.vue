@@ -80,6 +80,20 @@
       </slot-modal>
     </div>
   </div>
+  <div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th :key="th.key" v-for="th in headers">{{ th.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr :key="i" v-for="(item, i) in resultXlsxToJson">
+          <td :key="th.key" v-for="th in headers">{{ item[th.key] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 <script>
 /* eslint-disable */
@@ -98,64 +112,13 @@ export default {
       deleteCustomers: [],
       resultXlsxToJson: [],
       filteredLotNo: [],
-      tempResults: {
-        0: [
-          44281.34101851852,
-          0,
-          'AISI 304',
-          10.4,
-          0,
-          10.4,
-          0,
-          ,
-          '1531',
-          '0.40',
-          'SOFT',
-          'Admin'
-        ],
-        1: [
-          44281.34101851852,
-          0,
-          'AISI 304',
-          10.4,
-          0,
-          10.4,
-          0,
-          ,
-          '1532',
-          '0.40',
-          'SOFT',
-          'Admin'
-        ],
-        2: [
-          44281.34101851852,
-          0,
-          'AISI 304',
-          10.4,
-          0,
-          10.4,
-          0,
-          ,
-          '1531',
-          '0.40',
-          'SOFT',
-          'Admin'
-        ],
-        3: [
-          44281.34122685185,
-          0,
-          'AISI 304',
-          10.4,
-          0,
-          10.4,
-          0,
-          ,
-          '1532',
-          '0.40',
-          'SOFT',
-          'Admin'
-        ]
-      }
+      headers: [
+        { title: '강종', key: 'FIELD1' },
+        { title: '중량', key: 'GROSS_WEIGHT' },
+        { title: '로트번호', key: 'FIELD2' },
+        { title: '선경', key: 'FIELD3' },
+        { title: '강도', key: 'FIELD4' }
+      ]
     }
   },
   watch: {
@@ -175,26 +138,21 @@ export default {
   unmounted() {},
   methods: {
     // xlsx to json
-    readFile(event) {
-      // get File object from input tag
-      const file = event.target.files[0]
-      const fileName = file.name // declare FileReader, temp result
-      const reader = new FileReader()
-      let tmpResult = {} // if you use "this", don't use "function(e) {...}"
-      reader.onload = (e) => {
-        let data = e.target.result
-        data = new Uint8Array(data) // get excel file
-        let excelFile = XLSX.read(data, { type: 'array' }) // get prased object
-        excelFile.SheetNames.forEach(function (sheetName) {
-          const roa = XLSX.utils.sheet_to_json(excelFile.Sheets[sheetName], {
-            header: 1
-          })
-          if (roa.length) tmpResult[sheetName] = roa
+    readFile() {
+      let input = event.target
+      let reader = new FileReader()
+      let tmpResult = []
+      reader.onload = function () {
+        let data = reader.result
+        let workBook = XLSX.read(data, { type: 'binary' })
+        workBook.SheetNames.forEach(function (sheetName) {
+          let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
+          if (rows.length) tmpResult[sheetName] = rows
         })
-        this.resultXlsxToJson = tmpResult['Weighing Data']
-        // console.log(this.resultXlsxToJson)
+        this.resultXlsxToJson = tmpResult
+        console.log(this.resultXlsxToJson)
       }
-      reader.readAsArrayBuffer(file)
+      reader.readAsBinaryString(input.files[0])
     },
     addCustomer() {
       this.customers.push(this.newCustomer)
@@ -213,6 +171,7 @@ export default {
       for (let tempResult in this.resultXlsxToJson) {
         if (this.lotNo === '') {
           console.log(this.resultXlsxToJson)
+          return
         } else if (this.resultXlsxToJson[tempResult][8] === this.lotNo) {
           this.filteredLotNo.push(this.resultXlsxToJson[tempResult])
         }
