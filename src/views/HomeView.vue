@@ -81,15 +81,17 @@
     </div>
   </div>
   <div>
-    <table class="table table-bordered">
+    <table class="table table-bordered" v-if="filteredLotNo.length > 0">
       <thead>
         <tr>
           <th :key="th.key" v-for="th in headers">{{ th.title }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr :key="i" v-for="(item, i) in filteredLotNo">
-          <td :key="th.key" v-for="th in headers">{{ item[th.key] }}</td>
+        <tr :key="i" v-for="(item, i) in filteredLotNo[0]">
+          <td :key="th.key" v-for="th in headers">
+            <input type="text" v-model="item[th.key]" />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -113,11 +115,11 @@ export default {
       resultXlsxToJson: [],
       filteredLotNo: [],
       headers: [
-        { title: '강종', key: 'FIELD1' },
-        { title: '중량', key: 'GROSS_WEIGHT' },
         { title: '로트번호', key: 'FIELD2' },
+        { title: '강종', key: 'FIELD1' },
+        { title: '강도', key: 'FIELD4' },
         { title: '선경', key: 'FIELD3' },
-        { title: '강도', key: 'FIELD4' }
+        { title: '중량', key: 'GROSS_WEIGHT' }
       ]
     }
   },
