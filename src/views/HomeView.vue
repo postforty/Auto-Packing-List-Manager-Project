@@ -88,7 +88,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr :key="i" v-for="(item, i) in resultXlsxToJson">
+        <tr :key="i" v-for="(item, i) in filteredLotNo">
           <td :key="th.key" v-for="th in headers">{{ item[th.key] }}</td>
         </tr>
       </tbody>
@@ -138,21 +138,21 @@ export default {
   unmounted() {},
   methods: {
     // xlsx to json
-    readFile() {
-      let input = event.target
+    readFile(e) {
+      let files = e.target.files
       let reader = new FileReader()
-      let tmpResult = []
-      reader.onload = function () {
-        let data = reader.result
+      const temp = []
+      reader.onload = function (e) {
+        let data = e.target.result
         let workBook = XLSX.read(data, { type: 'binary' })
         workBook.SheetNames.forEach(function (sheetName) {
-          let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
-          if (rows.length) tmpResult[sheetName] = rows
+          let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
+          temp.push(xlsxToJson)
         })
-        this.resultXlsxToJson = tmpResult
-        console.log(this.resultXlsxToJson)
       }
-      reader.readAsBinaryString(input.files[0])
+      reader.readAsBinaryString(files[0])
+      this.resultXlsxToJson = temp
+      console.log(this.resultXlsxToJson)
     },
     addCustomer() {
       this.customers.push(this.newCustomer)
@@ -168,13 +168,11 @@ export default {
       this.deleteCustomers = []
     },
     lotNoFilter() {
-      for (let tempResult in this.resultXlsxToJson) {
-        if (this.lotNo === '') {
-          console.log(this.resultXlsxToJson)
-          return
-        } else if (this.resultXlsxToJson[tempResult][8] === this.lotNo) {
-          this.filteredLotNo.push(this.resultXlsxToJson[tempResult])
-        }
+      this.filteredLotNo = []
+      for (let tempResult of this.resultXlsxToJson) {
+        this.filteredLotNo.push(
+          tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
+        )
       }
       console.log(this.filteredLotNo)
       this.lotNo = ''
