@@ -20,10 +20,8 @@
       </button>
     </div>
     <div>
-      <button class="btn btn-danger me-1" @click="$refs.file.click()">
-        엑셀업로드
-      </button>
-      <button class="btn btn-danger me-1" @click="lotNoFilter">조회</button>
+      <button @click="$refs.file.click()">엑셀업로드</button>
+      <button @click="lotNoFilter">조회</button>
       <input
         type="file"
         style="display: none"
@@ -79,30 +77,18 @@
         </template>
       </slot-modal>
     </div>
-  </div>
-  <div>
-    <table class="table table-bordered" v-if="filteredLotNo.length > 0">
-      <thead>
-        <tr>
-          <th :key="th.key" v-for="th in headers">{{ th.title }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr :key="i" v-for="(item, i) in filteredLotNo[0]">
-          <td :key="th.key" v-for="th in headers">
-            <input type="text" v-model="item[th.key]" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      <simple-grid :headers="headers" :items="filteredLotNo" />
+    </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
+import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
 import SlotModal from '@/components/fragments/SlotModal.vue'
 import XLSX from 'xlsx'
 export default {
-  components: { SlotModal },
+  components: { SlotModal, SimpleGrid },
   data() {
     return {
       lotNo: '',
@@ -154,7 +140,7 @@ export default {
       }
       reader.readAsBinaryString(files[0])
       this.resultXlsxToJson = temp
-      console.log(this.resultXlsxToJson)
+      // console.log(this.resultXlsxToJson)
     },
     addCustomer() {
       this.customers.push(this.newCustomer)
