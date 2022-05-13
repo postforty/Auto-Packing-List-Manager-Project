@@ -150,13 +150,24 @@ export default {
       this.$refs.newCustomerModal.value = ''
       this.addCustomerShow = false
     },
+    // doDelete() {
+    //   let tempCustomers = []
+    //   for (const customer of this.deleteCustomers) {
+    //     tempCustomers.push(this.customers.filter((c) => c !== customer))
+    //   }
+    //   console.log(tempCustomers[0])
+    //   this.deleteCustomers = []
+    // },
     doDelete() {
-      let tempCustomers = []
-      for (const customer of this.deleteCustomers) {
-        tempCustomers.push(this.customers.filter((c) => c !== customer))
-      }
-      console.log(tempCustomers[0])
-      this.deleteCustomers = []
+      const tempCustomers = []
+
+      this.deleteCustomers.forEach((customer) => {
+        if (!customer.isChecked) {
+          tempCustomers.push(customer)
+        }
+      })
+
+      this.deleteCustomers = tempCustomers
     },
     lotNoFilter() {
       this.filteredLotNo = []
