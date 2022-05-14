@@ -65,9 +65,9 @@
                 v-model="deleteCustomers"
               />
               {{ customer }}
+              <button class="btn btn-primary" @click="doDelete">삭제</button>
             </div>
             {{ deleteCustomers }}
-            <button class="btn btn-primary" @click="doDelete">삭제</button>
           </div>
         </template>
         <template v-slot:footer>
@@ -145,29 +145,20 @@ export default {
       this.resultXlsxToJson = temp
       // console.log(this.resultXlsxToJson)
     },
+    // 추가한 고객이 select 에는 반영되나 삭제에는 반영되지 않는 문제가 있다.
     addCustomer() {
       this.customers.push(this.newCustomer)
       this.$refs.newCustomerModal.value = ''
-      this.addCustomerShow = false
+      this.BoolAddCustomerShow = false
     },
-    // doDelete() {
-    //   let tempCustomers = []
-    //   for (const customer of this.deleteCustomers) {
-    //     tempCustomers.push(this.customers.filter((c) => c !== customer))
-    //   }
-    //   console.log(tempCustomers[0])
-    //   this.deleteCustomers = []
-    // },
     doDelete() {
-      const tempCustomers = []
-
-      this.deleteCustomers.forEach((customer) => {
-        if (!customer.isChecked) {
-          tempCustomers.push(customer)
-        }
-      })
-
-      this.deleteCustomers = tempCustomers
+      let tempCustomers = []
+      console.log(this.deleteCustomers)
+      for (const customer of this.deleteCustomers) {
+        tempCustomers.push(this.customers.filter((c) => c !== customer))
+      }
+      this.customers = tempCustomers[0]
+      this.deleteCustomers = []
     },
     lotNoFilter() {
       this.filteredLotNo = []
