@@ -150,6 +150,7 @@ export default {
       this.customers.push(this.newCustomer)
       this.$refs.newCustomerModal.value = ''
       this.BoolAddCustomerShow = false
+      this.newCustomer = ''
     },
     doDelete() {
       let tempCustomers = []
