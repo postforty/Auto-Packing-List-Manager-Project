@@ -112,12 +112,12 @@ export default {
       BooldoDeleteShow: false
     }
   },
-  watch: {
-    customers: function () {
-      this.pureCustomers = this.customers.slice()
-      this.pureCustomers.shift()
-    }
-  },
+  // computed: {
+  //   customers: function () {
+  //     this.pureCustomers = this.customers.slice()
+  //     this.pureCustomers.shift()
+  //   }
+  // },
   setup() {},
   created() {
     this.pureCustomers = this.customers.slice()
