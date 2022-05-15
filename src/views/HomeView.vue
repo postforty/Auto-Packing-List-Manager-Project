@@ -112,12 +112,6 @@ export default {
       BooldoDeleteShow: false
     }
   },
-  // computed: {
-  //   customers: function () {
-  //     this.pureCustomers = this.customers.slice()
-  //     this.pureCustomers.shift()
-  //   }
-  // },
   setup() {},
   created() {
     this.pureCustomers = this.customers.slice()
@@ -145,12 +139,13 @@ export default {
       this.resultXlsxToJson = temp
       // console.log(this.resultXlsxToJson)
     },
-    // 추가한 고객이 select 에는 반영되나 삭제에는 반영되지 않는 문제가 있다.
     addCustomer() {
       this.customers.push(this.newCustomer)
       this.$refs.newCustomerModal.value = ''
       this.BoolAddCustomerShow = false
       this.newCustomer = ''
+      this.pureCustomers = this.customers.slice()
+      this.pureCustomers.shift()
     },
     doDelete() {
       let tempCustomers = []
