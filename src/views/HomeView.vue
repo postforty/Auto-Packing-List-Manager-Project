@@ -58,21 +58,24 @@
             </div>
           </div>
 
-          <div v-show="BooldoDeleteShow === true">
-            <div :key="customer" v-for="customer in pureCustomers">
-              <label for="">고객사 삭제</label>
-              <input
-                type="checkbox"
-                name=""
-                id=""
-                :value="customer"
-                v-model="deleteCustomers"
-              />
-              {{ customer }}
+          <div v-show="BoolDoDeleteShow === true">
+            <label for="">고객사 삭제</label>
+            <div :key="customer.code" v-for="customer in customers">
+              <div v-if="customer.code !== 'none'">
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  :value="customer"
+                  v-model="checkedCustomers"
+                  @change="customer.isChecked = !customer.isChecked"
+                />
+                {{ customer.company }}
+              </div>
             </div>
             <button class="btn btn-primary" @click="doDelete">삭제</button>
-            {{ deleteCustomers }}
           </div>
+          {{ checkedCustomers }}
         </template>
         <template v-slot:footer>
           <button class="btn btn-secondary" data-bs-dismiss="modal">
@@ -98,15 +101,15 @@ export default {
     return {
       lotNo: '',
       customers: [
-        { code: '001-00-00000', company: 'A사' },
-        { code: '002-00-00000', company: 'B사' },
-        { code: '003-00-00000', company: 'C사' }
+        { code: '001-00-00000', company: 'A사', isChecked: false },
+        { code: '002-00-00000', company: 'B사', isChecked: false },
+        { code: '003-00-00000', company: 'C사', isChecked: false }
       ],
       // customers: [],
       selectedCustomer: 'none',
       newCustomer: '',
       pureCustomers: [],
-      deleteCustomers: [],
+      checkedCustomers: [],
       resultXlsxToJson: [],
       filteredLotNo: [],
       headers: [
@@ -117,13 +120,17 @@ export default {
         { title: '중량', key: 'GROSS_WEIGHT' }
       ],
       BoolAddCustomerShow: false,
-      BooldoDeleteShow: false
+      BoolDoDeleteShow: false
     }
   },
   setup() {},
   created() {
     this.pureCustomers = this.customers.slice()
-    this.customers.unshift({ code: 'none', company: '=== 선택 ===' })
+    this.customers.unshift({
+      code: 'none',
+      company: '=== 선택 ===',
+      isChecked: false
+    })
   },
   mounted() {},
   unmounted() {},
@@ -154,14 +161,34 @@ export default {
       this.pureCustomers.shift()
     },
     // checkbox 선택 삭제 구현해야 함
+    // doDelete() {
+    //   let tempCustomers = []
+    //   // console.log(this.checkedCustomers)
+    //   for (const customer of this.customers) {
+    //     for (const deleteCustomer of this.checkedCustomers) {
+    //       // console.log(deleteCustomer)
+    //       if (
+    //         (customer.code !== deleteCustomer) &
+    //         (tempCustomers.indexOf(customer) !== -1)
+    //       ) {
+    //         tempCustomers.push(customer)
+    //       }
+    //     }
+    //   }
+    //   console.log(tempCustomers)
+    //   // this.customers = tempCustomers
+    //   // tempCustomers = []
+    //   // this.checkedCustomers = []
+    // },
     doDelete() {
-      let tempCustomers = []
-      console.log(this.deleteCustomers)
-      for (const customer of this.deleteCustomers) {
-        tempCustomers.push(this.customers.filter((c) => c !== customer))
-      }
-      this.customers = tempCustomers[0]
-      this.deleteCustomers = []
+      const tempCustomers = []
+      this.customers.forEach((customer) => {
+        if (!customer.isChecked) {
+          tempCustomers.push(customer)
+        }
+      })
+      console.log(tempCustomers)
+      this.customers = tempCustomers
     },
     lotNoFilter() {
       this.filteredLotNo = []
@@ -179,9 +206,9 @@ export default {
       } else this.BoolAddCustomerShow = false
     },
     doDeleteShow() {
-      if (this.BooldoDeleteShow === false) {
-        this.BooldoDeleteShow = true
-      } else this.BooldoDeleteShow = false
+      if (this.BoolDoDeleteShow === false) {
+        this.BoolDoDeleteShow = true
+      } else this.BoolDoDeleteShow = false
     }
   }
 }
