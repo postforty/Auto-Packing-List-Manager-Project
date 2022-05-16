@@ -5,13 +5,25 @@
       <label for="">로트번호 입력</label>
       <input v-model="lotNo" type="text" name="" id="" />
     </div>
+    <label for="">고객사 선택</label>
+    <select v-model="selectedCustomer">
+      <option
+        :key="customer.code"
+        v-for="customer in customers"
+        :value="customer.code"
+      >
+        {{ customer.company }}
+      </option>
+    </select>
+    <div>
+      <button data-bs-toggle="modal" data-bs-target="#staticBackdropCustomers">
+        고객사 관리
+      </button>
+    </div>
     <div>
       <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Packing List 생성
       </button>
-      <!-- <button data-bs-toggle="modal" data-bs-target="#delCustomerModal">
-        삭제
-      </button> -->
     </div>
     <div>
       <button @click="$refs.file.click()">엑셀업로드</button>
@@ -23,6 +35,76 @@
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         @change="readFile"
       />
+    </div>
+    <!-- 고객사 관리 모달 -->
+    <div>
+      <slot-modal modalId="staticBackdropCustomers">
+        <template v-slot:title>고객사 관리</template>
+        <template v-slot:body>
+          <div>
+            <button class="btn btn-primary" @click="addCustomerShow">
+              추가
+            </button>
+            <!-- <button class="btn btn-danger" @click="doDeleteShow">삭제</button> -->
+          </div>
+          <div>
+            <div v-show="BoolAddCustomerShow === true">
+              <label for="">고객사 추가</label>
+              <div>
+                <label for="">사업자 번호</label>
+                <input
+                  v-model="newCustomer.code"
+                  type="text"
+                  name=""
+                  ref="newCustomerModal"
+                />
+              </div>
+              <div>
+                <label for="">고객사 명</label>
+                <input
+                  v-model="newCustomer.company"
+                  type="text"
+                  name=""
+                  ref="newCustomerModal"
+                />
+              </div>
+              <button class="btn btn-primary" @click="addCustomer">저장</button>
+            </div>
+          </div>
+          <div>
+            <div>
+              <input
+                type="search"
+                v-model.trim="searchName"
+                @keyup.enter="getCustomers"
+                placeholder="Name"
+              />
+              <button class="btn btn-primary" @click="getCustomers">
+                조회
+              </button>
+            </div>
+            <div :key="customer.code" v-for="customer in customers">
+              <div v-if="customer.code !== 'none'">
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  :value="customer"
+                  @change="customer.isChecked = !customer.isChecked"
+                />
+                {{ customer.company }}
+              </div>
+            </div>
+            <button class="btn btn-primary" @click="doDelete">삭제</button>
+          </div>
+        </template>
+        <template v-slot:footer>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
+          </button>
+          <button class="btn btn-primary" @click="addCustomer">저장</button>
+        </template>
+      </slot-modal>
     </div>
     <!-- Packing List 모달 -->
     <div>
@@ -47,19 +129,25 @@
           </div>
           <div>
             <div v-show="BoolAddCustomerShow === true">
-              <label for="">고객사 추가</label
-              ><input
-                v-model="newCustomer.code"
-                type="text"
-                name=""
-                ref="newCustomerModal"
-              />
-              <input
-                v-model="newCustomer.company"
-                type="text"
-                name=""
-                ref="newCustomerModal"
-              />
+              <label for="">고객사 추가</label>
+              <div>
+                <label for="">사업자 번호</label>
+                <input
+                  v-model="newCustomer.code"
+                  type="text"
+                  name=""
+                  ref="newCustomerModal"
+                />
+              </div>
+              <div>
+                <label for="">고객사 명</label>
+                <input
+                  v-model="newCustomer.company"
+                  type="text"
+                  name=""
+                  ref="newCustomerModal"
+                />
+              </div>
               <button class="btn btn-primary" @click="addCustomer">저장</button>
             </div>
           </div>
@@ -192,7 +280,8 @@ export default {
       if (this.BoolDoDeleteShow === false) {
         this.BoolDoDeleteShow = true
       } else this.BoolDoDeleteShow = false
-    }
+    },
+    getCustomers() {}
   }
 }
 </script>
