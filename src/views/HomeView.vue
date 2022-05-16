@@ -31,9 +31,13 @@
         <template v-slot:body>
           <div>
             <label for="">고객사 선택</label>
-            <select v-model="selectedCustomer" name="" id="">
-              <option :key="i" v-for="(customer, i) in customers">
-                {{ customer }}
+            <select v-model="selectedCustomer">
+              <option
+                :key="customer.code"
+                v-for="customer in customers"
+                :value="customer.code"
+              >
+                {{ customer.company }}
               </option>
             </select>
             <button class="btn btn-primary" @click="addCustomerShow">
@@ -65,8 +69,8 @@
                 v-model="deleteCustomers"
               />
               {{ customer }}
-              <button class="btn btn-primary" @click="doDelete">삭제</button>
             </div>
+            <button class="btn btn-primary" @click="doDelete">삭제</button>
             {{ deleteCustomers }}
           </div>
         </template>
@@ -93,9 +97,13 @@ export default {
   data() {
     return {
       lotNo: '',
-      customers: ['A사', 'B사', 'C사'],
+      customers: [
+        { code: '001-00-00000', company: 'A사' },
+        { code: '002-00-00000', company: 'B사' },
+        { code: '003-00-00000', company: 'C사' }
+      ],
       // customers: [],
-      selectedCustomer: '',
+      selectedCustomer: 'none',
       newCustomer: '',
       pureCustomers: [],
       deleteCustomers: [],
@@ -115,11 +123,9 @@ export default {
   setup() {},
   created() {
     this.pureCustomers = this.customers.slice()
-    this.customers.unshift('고객사를 선택하세요')
+    this.customers.unshift({ code: 'none', company: '=== 선택 ===' })
   },
-  mounted() {
-    this.selectedCustomer = this.customers[0]
-  },
+  mounted() {},
   unmounted() {},
   methods: {
     // xlsx to json
@@ -147,6 +153,7 @@ export default {
       this.pureCustomers = this.customers.slice()
       this.pureCustomers.shift()
     },
+    // checkbox 선택 삭제 구현해야 함
     doDelete() {
       let tempCustomers = []
       console.log(this.deleteCustomers)
