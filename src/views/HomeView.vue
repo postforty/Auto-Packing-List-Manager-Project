@@ -77,22 +77,38 @@
                 type="search"
                 v-model.trim="searchName"
                 @keyup.enter="getCustomers"
-                placeholder="Name"
+                placeholder="고객사 명"
               />
               <button class="btn btn-primary" @click="getCustomers">
                 조회
               </button>
             </div>
-            <div :key="customer.code" v-for="customer in customers">
-              <div v-if="customer.code !== 'none'">
-                <input
-                  type="checkbox"
-                  name=""
-                  id=""
-                  :value="customer"
-                  @change="customer.isChecked = !customer.isChecked"
-                />
-                {{ customer.company }}
+            <div v-if="searchName === ''">
+              <div :key="customer.code" v-for="customer in customers">
+                <div v-if="customer.code !== 'none'">
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    :value="customer"
+                    @change="customer.isChecked = !customer.isChecked"
+                  />
+                  {{ customer.company }}
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div :key="customer.code" v-for="customer in searchCustomers">
+                <div v-if="customer.code !== 'none'">
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    :value="customer"
+                    @change="customer.isChecked = !customer.isChecked"
+                  />
+                  {{ customer.company }}
+                </div>
               </div>
             </div>
             <button class="btn btn-primary" @click="doDelete">삭제</button>
@@ -109,7 +125,7 @@
     <!-- Packing List 모달 -->
     <div>
       <slot-modal modalId="staticBackdrop">
-        <template v-slot:title>Pack List</template>
+        <template v-slot:title>Packing List</template>
         <template v-slot:body>
           <div>
             <label for="">고객사 선택</label>
@@ -132,21 +148,11 @@
               <label for="">고객사 추가</label>
               <div>
                 <label for="">사업자 번호</label>
-                <input
-                  v-model="newCustomer.code"
-                  type="text"
-                  name=""
-                  ref="newCustomerModal"
-                />
+                <input v-model="newCustomer.code" type="text" name="" />
               </div>
               <div>
                 <label for="">고객사 명</label>
-                <input
-                  v-model="newCustomer.company"
-                  type="text"
-                  name=""
-                  ref="newCustomerModal"
-                />
+                <input v-model="newCustomer.company" type="text" name="" />
               </div>
               <button class="btn btn-primary" @click="addCustomer">저장</button>
             </div>
@@ -154,7 +160,7 @@
 
           <div v-show="BoolDoDeleteShow === true">
             <label for="">고객사 삭제</label>
-            <div :key="customer.code" v-for="customer in customers">
+            <div :key="customer.code" v-for="customer in searchCustomers">
               <div v-if="customer.code !== 'none'">
                 <input
                   type="checkbox"
@@ -212,7 +218,9 @@ export default {
         { title: '중량', key: 'GROSS_WEIGHT' }
       ],
       BoolAddCustomerShow: false,
-      BoolDoDeleteShow: false
+      BoolDoDeleteShow: false,
+      searchName: '',
+      searchCustomers: []
     }
   },
   setup() {},
@@ -247,12 +255,11 @@ export default {
     addCustomer() {
       console.log(this.newCustomer)
       this.customers.push(this.newCustomer)
-      this.$refs.newCustomerModal.value = ''
       this.BoolAddCustomerShow = false
       this.newCustomer = { code: '', company: '', isChecked: false }
     },
     doDelete() {
-      const tempCustomers = []
+      let tempCustomers = []
       this.customers.forEach((customer) => {
         if (!customer.isChecked) {
           tempCustomers.push(customer)
@@ -260,6 +267,7 @@ export default {
       })
       this.customers = tempCustomers
       tempCustomers = []
+      this.searchName = ''
     },
     lotNoFilter() {
       this.filteredLotNo = []
@@ -281,7 +289,16 @@ export default {
         this.BoolDoDeleteShow = true
       } else this.BoolDoDeleteShow = false
     },
-    getCustomers() {}
+    getCustomers() {
+      let tempCustomers = []
+      this.customers.forEach((customer) => {
+        if (customer.company === this.searchName) {
+          tempCustomers.push(customer)
+        }
+      })
+      this.searchCustomers = tempCustomers
+      tempCustomers = []
+    }
   }
 }
 </script>
