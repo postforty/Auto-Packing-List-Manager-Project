@@ -49,7 +49,13 @@
             <div v-show="BoolAddCustomerShow === true">
               <label for="">고객사 추가</label
               ><input
-                v-model="newCustomer"
+                v-model="newCustomer.code"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+              />
+              <input
+                v-model="newCustomer.company"
                 type="text"
                 name=""
                 ref="newCustomerModal"
@@ -67,7 +73,6 @@
                   name=""
                   id=""
                   :value="customer"
-                  v-model="checkedCustomers"
                   @change="customer.isChecked = !customer.isChecked"
                 />
                 {{ customer.company }}
@@ -75,7 +80,6 @@
             </div>
             <button class="btn btn-primary" @click="doDelete">삭제</button>
           </div>
-          {{ checkedCustomers }}
         </template>
         <template v-slot:footer>
           <button class="btn btn-secondary" data-bs-dismiss="modal">
@@ -107,7 +111,7 @@ export default {
       ],
       // customers: [],
       selectedCustomer: 'none',
-      newCustomer: '',
+      newCustomer: { code: '', company: '', isChecked: false },
       pureCustomers: [],
       checkedCustomers: [],
       resultXlsxToJson: [],
@@ -153,33 +157,12 @@ export default {
       // console.log(this.resultXlsxToJson)
     },
     addCustomer() {
+      console.log(this.newCustomer)
       this.customers.push(this.newCustomer)
       this.$refs.newCustomerModal.value = ''
       this.BoolAddCustomerShow = false
-      this.newCustomer = ''
-      this.pureCustomers = this.customers.slice()
-      this.pureCustomers.shift()
+      this.newCustomer = { code: '', company: '', isChecked: false }
     },
-    // checkbox 선택 삭제 구현해야 함
-    // doDelete() {
-    //   let tempCustomers = []
-    //   // console.log(this.checkedCustomers)
-    //   for (const customer of this.customers) {
-    //     for (const deleteCustomer of this.checkedCustomers) {
-    //       // console.log(deleteCustomer)
-    //       if (
-    //         (customer.code !== deleteCustomer) &
-    //         (tempCustomers.indexOf(customer) !== -1)
-    //       ) {
-    //         tempCustomers.push(customer)
-    //       }
-    //     }
-    //   }
-    //   console.log(tempCustomers)
-    //   // this.customers = tempCustomers
-    //   // tempCustomers = []
-    //   // this.checkedCustomers = []
-    // },
     doDelete() {
       const tempCustomers = []
       this.customers.forEach((customer) => {
@@ -187,8 +170,8 @@ export default {
           tempCustomers.push(customer)
         }
       })
-      console.log(tempCustomers)
       this.customers = tempCustomers
+      tempCustomers = []
     },
     lotNoFilter() {
       this.filteredLotNo = []
