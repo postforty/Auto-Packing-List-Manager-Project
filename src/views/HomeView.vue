@@ -182,17 +182,24 @@
       </slot-modal>
     </div>
     <div>
-      <simple-grid :headers="headers" :items="filteredLotNo" />
+      <!-- <simple-grid :headers="headers" :items="filteredLotNo" /> -->
+      <grid-pagination
+        :headers="headers"
+        :items="filteredLotNo"
+        @click-buttons="handleClickButtons"
+      />
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
-import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
+import GridPagination from '@/components/layouts/GridPagination.vue'
+// import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
 import SlotModal from '@/components/fragments/SlotModal.vue'
 import XLSX from 'xlsx'
 export default {
-  components: { SlotModal, SimpleGrid },
+  // components: { SlotModal, SimpleGrid, GridPagination },
+  components: { SlotModal, GridPagination },
   data() {
     return {
       lotNo: '',

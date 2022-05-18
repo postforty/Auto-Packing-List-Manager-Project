@@ -7,21 +7,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr :key="i" v-for="(item, i) in items[0]">
+        <tr :key="i" v-for="(item, i) in formattedItems">
           <td :key="th.key" v-for="th in headers">
             <input type="text" v-model="item[th.key]" />
           </td>
         </tr>
       </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-        </tr>
-      </tfoot>
     </table>
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   components: {},
   props: {
@@ -36,40 +32,38 @@ export default {
       default: function () {
         return []
       }
+    },
+    sliceStart: {
+      type: Number,
+      default: 0
+    },
+    sliceEnd: {
+      type: Number,
+      default: 100
     }
-    // sliceStart: {
-    //   type: Number,
-    //   default: 0
-    // },
-    // sliceEnd: {
-    //   type: Number,
-    //   default: 100
-    // }
   },
   data() {
     return {}
   },
   setup() {},
   created() {},
-  //   computed: {
-  //     formattedItems: function () {
-  //       console.log('grid: ', this.items.length)
-  //       return this.items.slice(this.sliceStart, this.sliceEnd)
-  //       //.slice(this.sliceStart, this.sliceEnd)
-  //     }
-  //   },
+  computed: {
+    formattedItems: function () {
+      console.log('grid: ', this.items[0].length)
+      return this.items[0].slice(this.sliceStart, this.sliceEnd)
+    }
+  },
   mounted() {},
   unmounted() {},
   methods: {
-    // changePage(start, end) {
-    //   console.log('changePage', start, end)
-    //   this.sliceStart = start
-    //   this.sliceEnd = end
-    // },
-    // handleMethod(method, id) {
-    //   // console.log(`handleMethod: ${method} id: ${id}`)
-    //   this.$emit('clickButtons', method, id)
-    // }
+    changePage(start, end) {
+      console.log('changePage', start, end)
+      this.sliceStart = start
+      this.sliceEnd = end
+    },
+    handleMethod(method, id) {
+      this.$emit('clickButtons', method, id)
+    }
   }
 }
 </script>
