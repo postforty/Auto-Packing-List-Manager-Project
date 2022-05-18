@@ -13,6 +13,11 @@
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </template>

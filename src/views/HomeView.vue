@@ -10,7 +10,7 @@
       <option
         :key="customer.code"
         v-for="customer in customers"
-        :value="customer.code"
+        :value="customer.company"
       >
         {{ customer.company }}
       </option>
@@ -21,7 +21,11 @@
       </button>
     </div>
     <div>
-      <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <button
+        v-show="selectedCustomer !== '=== 선택 ==='"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
         Packing List 생성
       </button>
     </div>
@@ -42,13 +46,7 @@
         <template v-slot:title>고객사 관리</template>
         <template v-slot:body>
           <div>
-            <button class="btn btn-primary" @click="addCustomerShow">
-              추가
-            </button>
-            <!-- <button class="btn btn-danger" @click="doDeleteShow">삭제</button> -->
-          </div>
-          <div>
-            <div v-show="BoolAddCustomerShow === true">
+            <div>
               <label for="">고객사 추가</label>
               <div>
                 <label for="">사업자 번호</label>
@@ -68,7 +66,7 @@
                   ref="newCustomerModal"
                 />
               </div>
-              <button class="btn btn-primary" @click="addCustomer">저장</button>
+              <button class="btn btn-primary" @click="addCustomer">추가</button>
             </div>
           </div>
           <div>
@@ -118,7 +116,6 @@
           <button class="btn btn-secondary" data-bs-dismiss="modal">
             닫기
           </button>
-          <button class="btn btn-primary" @click="addCustomer">저장</button>
         </template>
       </slot-modal>
     </div>
@@ -128,36 +125,37 @@
         <template v-slot:title>Packing List</template>
         <template v-slot:body>
           <div>
-            <label for="">고객사 선택</label>
-            <select v-model="selectedCustomer">
-              <option
-                :key="customer.code"
-                v-for="customer in customers"
-                :value="customer.code"
-              >
-                {{ customer.company }}
-              </option>
-            </select>
-            <button class="btn btn-primary" @click="addCustomerShow">
-              추가
-            </button>
-            <button class="btn btn-danger" @click="doDeleteShow">삭제</button>
+            <label for="">날짜</label>
+            <input type="date" v-model="nowDate" />
           </div>
           <div>
-            <div v-show="BoolAddCustomerShow === true">
-              <label for="">고객사 추가</label>
-              <div>
-                <label for="">사업자 번호</label>
-                <input v-model="newCustomer.code" type="text" name="" />
-              </div>
-              <div>
-                <label for="">고객사 명</label>
-                <input v-model="newCustomer.company" type="text" name="" />
-              </div>
-              <button class="btn btn-primary" @click="addCustomer">저장</button>
-            </div>
+            <label for="">로트 번호</label>
+            <input type="text" v-model="lotNo" />
           </div>
-
+          <div>
+            <label for="">고객사</label>
+            <input type="text" v-model="selectedCustomer" />
+          </div>
+          <div>
+            <label for="">강종</label>
+            <input type="text" v-model="packingList[0].FIELD1" />
+          </div>
+          <div>
+            <label for="">강도</label>
+            <input type="text" v-model="packingList[0].FIELD4" />
+          </div>
+          <div>
+            <label for="">선경</label>
+            <input type="text" v-model="packingList[0].FIELD3" />
+          </div>
+          <div>
+            <label for="">총 수량</label>
+            <input type="text" v-model="packingList[0].countTotal" />
+          </div>
+          <div>
+            <label for="">총 중량</label>
+            <input type="text" v-model="packingList[0].sumTotal" />
+          </div>
           <div v-show="BoolDoDeleteShow === true">
             <label for="">고객사 삭제</label>
             <div :key="customer.code" v-for="customer in searchCustomers">
@@ -179,7 +177,7 @@
           <button class="btn btn-secondary" data-bs-dismiss="modal">
             닫기
           </button>
-          <button class="btn btn-primary" @click="addCustomer">저장</button>
+          <button class="btn btn-primary" @click="doExcel">엑셀다운로드</button>
         </template>
       </slot-modal>
     </div>
@@ -203,13 +201,24 @@ export default {
         { code: '002-00-00000', company: 'B사', isChecked: false },
         { code: '003-00-00000', company: 'C사', isChecked: false }
       ],
-      // customers: [],
-      selectedCustomer: 'none',
+      selectedCustomer: '=== 선택 ===',
       newCustomer: { code: '', company: '', isChecked: false },
       pureCustomers: [],
       checkedCustomers: [],
       resultXlsxToJson: [],
       filteredLotNo: [],
+      packingList: [
+        {
+          selectedDate: '',
+          lotNo: '',
+          customer: '',
+          FIELD1: '',
+          FIELD4: '',
+          FIELD3: '',
+          countTotal: 0,
+          sumTotal: 0
+        }
+      ],
       headers: [
         { title: '로트번호', key: 'FIELD2' },
         { title: '강종', key: 'FIELD1' },
@@ -220,7 +229,18 @@ export default {
       BoolAddCustomerShow: false,
       BoolDoDeleteShow: false,
       searchName: '',
-      searchCustomers: []
+      searchCustomers: [],
+      nowDate: '',
+      headersPackingList: [
+        { title: '날짜', key: 'selectedDate' },
+        { title: '로트 번호', key: 'lotNo' },
+        { title: '고객사', key: 'customer' },
+        { title: '강종', key: 'FIELD1' },
+        { title: '강도', key: 'FIELD4' },
+        { title: '선경', key: 'FIELD3' },
+        { title: '총 수량', key: 'countTotal' },
+        { title: '총 중량', key: 'sumTotal' }
+      ]
     }
   },
   setup() {},
@@ -232,7 +252,9 @@ export default {
       isChecked: false
     })
   },
-  mounted() {},
+  mounted() {
+    this.nowDate = new Date().toISOString().substring(0, 10)
+  },
   unmounted() {},
   methods: {
     // xlsx to json
@@ -270,15 +292,27 @@ export default {
       this.searchName = ''
     },
     lotNoFilter() {
-      this.filteredLotNo = []
+      const tempFilteredLotNo = []
       for (let tempResult of this.resultXlsxToJson) {
-        this.filteredLotNo.push(
+        tempFilteredLotNo.push(
           tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
         )
       }
-      console.log(this.filteredLotNo)
-      this.lotNo = ''
+      this.filteredLotNo = tempFilteredLotNo
+      // console.log(this.filteredLotNo)
+      this.footerComputed()
     },
+    // lotNoFilter() {
+    //   this.filteredLotNo = []
+    //   for (let tempResult of this.resultXlsxToJson) {
+    //     this.filteredLotNo.push(
+    //       tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
+    //     )
+    //   }
+    //   // console.log(this.filteredLotNo)
+    //   this.lotNo = ''
+    //   this.$refs.simple_grid.sumTotal()
+    // },
     addCustomerShow() {
       if (this.BoolAddCustomerShow === false) {
         this.BoolAddCustomerShow = true
@@ -298,6 +332,33 @@ export default {
       })
       this.searchCustomers = tempCustomers
       tempCustomers = []
+    },
+    footerComputed() {
+      let tempSumTotalValue = 0
+      let count = 0
+      for (let resultArray of this.filteredLotNo) {
+        for (let reultObject of resultArray) {
+          tempSumTotalValue += Number(reultObject.GROSS_WEIGHT)
+          count++
+        }
+      }
+      this.packingList[0].selectedDate = this.nowDate
+      this.packingList[0].lotNo = this.lotNo
+      this.packingList[0].customer = this.selectedCustomer
+      this.packingList[0].FIELD1 = this.filteredLotNo[0][0].FIELD1
+      this.packingList[0].FIELD4 = this.filteredLotNo[0][0].FIELD4
+      this.packingList[0].FIELD3 = this.filteredLotNo[0][0].FIELD3
+      this.packingList[0].sumTotal = tempSumTotalValue.toFixed(1)
+      this.packingList[0].countTotal = count
+    },
+    doExcel() {
+      // console.log(this.packingList[0])
+      this.$ExcelFromTable(
+        this.headersPackingList,
+        this.packingList,
+        'packingList',
+        {}
+      )
     }
   }
 }
