@@ -366,6 +366,16 @@ export default {
         'packingList',
         {}
       )
+    },
+    handleClickButtons(method, id) {
+      if (method === 'showEditModal') {
+        this.modalDetailPayload.id = id
+        this.showEditModal()
+      } else if (method === 'showEList') {
+        this.showEList(id)
+      } else if (method === 'sendMessage') {
+        this.sendMessage(id)
+      }
     }
   }
 }
