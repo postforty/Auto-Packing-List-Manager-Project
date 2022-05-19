@@ -3,22 +3,28 @@
   <nav aria-label="Page navigation example">
     <div>
       <ul class="pagination">
-        <li class="page-item">
+        <li
+          class="page-item"
+          :class="{ disabled: currentPage - maxPagination < 1 }"
+        >
           <button class="page-link" @click="addPaging(-1)">
             <span aria-hidden="true">&laquo;</span>
           </button>
         </li>
-        <li class="page-item">
-          <button
-            v-for="pageli in calPageList"
-            :key="pageli.page"
-            class="page-link"
-            @click="changePage(pageli.page)"
-          >
+        <li
+          class="page-item"
+          :class="{ active: currentPage == pageli.page }"
+          v-for="pageli in calPageList"
+          :key="pageli.page"
+        >
+          <button class="page-link" @click="changePage(pageli.page)">
             {{ pageli.page }}
           </button>
         </li>
-        <li class="page-item">
+        <li
+          class="page-item"
+          :class="{ disabled: start + maxPagination > pageList.length }"
+        >
           <button class="page-link" @click="addPaging(1)">
             <span aria-hidden="true">&raquo;</span>
           </button>
@@ -35,7 +41,8 @@
         style="max-width: 70px"
       >
         <option value="10">10</option>
-        <option value="5">5</option>
+        <option value="20">20</option>
+        <option :value="itemCount">전체</option>
       </select>
     </div>
   </nav>
@@ -59,7 +66,7 @@ export default {
   },
   data() {
     return {
-      resultPerPage: 5, // 한페이지에 보여질 result 개수
+      resultPerPage: 10, // 한페이지에 보여질 result 개수
       pageLength: 0,
       pageList: [],
       start: 0, // 페이지네이션 start
@@ -71,7 +78,6 @@ export default {
   watch: {
     items() {
       this.initPaging()
-      this.itemCount(this.items[0].length)
     }
   },
   setup() {},

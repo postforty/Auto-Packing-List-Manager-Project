@@ -306,20 +306,8 @@ export default {
         )
       }
       this.filteredLotNo = tempFilteredLotNo
-      // console.log(this.filteredLotNo)
-      this.footerComputed()
+      this.packingComputed()
     },
-    // lotNoFilter() {
-    //   this.filteredLotNo = []
-    //   for (let tempResult of this.resultXlsxToJson) {
-    //     this.filteredLotNo.push(
-    //       tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
-    //     )
-    //   }
-    //   // console.log(this.filteredLotNo)
-    //   this.lotNo = ''
-    //   this.$refs.simple_grid.sumTotal()
-    // },
     addCustomerShow() {
       if (this.BoolAddCustomerShow === false) {
         this.BoolAddCustomerShow = true
@@ -340,7 +328,7 @@ export default {
       this.searchCustomers = tempCustomers
       tempCustomers = []
     },
-    footerComputed() {
+    packingComputed() {
       let tempSumTotalValue = 0
       let count = 0
       for (let resultArray of this.filteredLotNo) {

@@ -3,11 +3,13 @@
     <table class="table table-bordered" v-if="items.length > 0">
       <thead>
         <tr>
+          <th></th>
           <th :key="th.key" v-for="th in headers">{{ th.title }}</th>
         </tr>
       </thead>
       <tbody>
         <tr :key="i" v-for="(item, i) in formattedItems">
+          <td>{{ i + 1 + sliceStart }}</td>
           <td :key="th.key" v-for="th in headers">
             <input type="text" v-model="item[th.key]" />
           </td>

@@ -50,7 +50,6 @@ export default {
       this.sliceEnd = end
     },
     handleClickButtons(method, id) {
-      // console.log(`handleClickButtons: ${method} id: ${id}`)
       this.$emit('clickButtons', method, id)
     }
   }
