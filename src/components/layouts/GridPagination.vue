@@ -8,7 +8,7 @@
       @click-buttons="handleClickButtons"
     />
     <pagination-packing
-      :itemCount="items.length"
+      :itemCount="items[0].length"
       @change-page="changePage"
       :items="items"
     />

@@ -1,42 +1,32 @@
 <template>
   <!-- BEGIN pagination -->
-  <nav class="pagination row py-2">
-    <div class="col-12 col-md-3"></div>
-    <div
-      class="col-12 col-md-6 d-flex align-items-center justify-content-center"
-    >
-      <div class="btn-group">
-        <button
-          class="btn btn-white"
-          :class="{ disabled: currentPage - maxPagination < 1 }"
-          type="button"
-          @click="addPaging(-1)"
-        >
-          <i class="fa fa-chevron-left"></i>
-        </button>
-        <button
-          v-for="pageli in calPageList"
-          :key="pageli.page"
-          class="btn btn-white"
-          :class="{ active: currentPage == pageli.page }"
-          @click="changePage(pageli.page)"
-        >
-          {{ pageli.page }}
-        </button>
-        <button
-          class="btn btn-white"
-          type="button"
-          :class="{ disabled: start + maxPagination > pageList.length }"
-          @click="addPaging(1)"
-        >
-          <i class="fa fa-chevron-right"></i>
-        </button>
-      </div>
+  <nav aria-label="Page navigation example">
+    <div>
+      <ul class="pagination">
+        <li class="page-item">
+          <button class="page-link" @click="addPaging(-1)">
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+        <li class="page-item">
+          <button
+            v-for="pageli in calPageList"
+            :key="pageli.page"
+            class="page-link"
+            @click="changePage(pageli.page)"
+          >
+            {{ pageli.page }}
+          </button>
+        </li>
+        <li class="page-item">
+          <button class="page-link" @click="addPaging(1)">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      </ul>
     </div>
-    <div
-      class="col-12 col-md-3 d-flex align-items-center justify-content-center"
-    >
-      <span class="fs-6 me-1" style="width: 80px">표시개수 : </span>
+    <div>
+      <span>표시개수 : </span>
       <select
         class="form-select form-select-sm"
         v-model="resultPerPage"
@@ -89,6 +79,8 @@ export default {
   },
   computed: {
     calPageList: function () {
+      console.log('pageList: ', this.pageList)
+      console.log('itemCount: ', this.itemCount)
       return this.pageList.slice(this.start - 1, this.end)
     }
   },
