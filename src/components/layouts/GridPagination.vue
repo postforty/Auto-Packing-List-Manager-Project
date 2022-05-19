@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="items[0] !== undefined">
     <simple-grid
       :headers="headers"
       :items="items"

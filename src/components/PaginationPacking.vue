@@ -71,6 +71,7 @@ export default {
   watch: {
     items() {
       this.initPaging()
+      this.itemCount(this.items[0].length)
     }
   },
   setup() {},

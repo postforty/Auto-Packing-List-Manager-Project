@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Packing List 자동 출력</h1>
+    <h1>Packing List 자동 생성</h1>
     <div>
       <label for="">로트번호 입력</label>
       <input v-model="lotNo" type="text" name="" id="" />
