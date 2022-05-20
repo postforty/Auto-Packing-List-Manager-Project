@@ -158,61 +158,63 @@
       <slot-modal modalId="staticBackdrop">
         <template v-slot:title>Packing List</template>
         <template v-slot:body>
-          <div>
-            <label for="" class="col-form-label">날짜:</label>
-            <input type="date" class="form-control" v-model="nowDate" />
-          </div>
-          <div>
-            <label for="" class="col-form-label">로트 번호:</label>
-            <input type="text" class="form-control" v-model="lotNo" />
-          </div>
-          <div>
-            <label for="" class="col-form-label">고객사:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="selectedCustomer"
-            />
-          </div>
-          <div>
-            <label for="" class="col-form-label">강종:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="packingList[0].FIELD1"
-            />
-          </div>
-          <div>
-            <label for="" class="col-form-label">강도:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="packingList[0].FIELD4"
-            />
-          </div>
-          <div>
-            <label for="" class="col-form-label">선경:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="packingList[0].FIELD3"
-            />
-          </div>
-          <div>
-            <label for="" class="col-form-label">총 수량:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="packingList[0].countTotal"
-            />
-          </div>
-          <div>
-            <label for="" class="col-form-label">총 중량:</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="packingList[0].sumTotal"
-            />
+          <div class="modal-body p-3 pt-0">
+            <div>
+              <label for="" class="col-form-label">날짜:</label>
+              <input type="date" class="form-control mb-2" v-model="nowDate" />
+            </div>
+            <div>
+              <label for="" class="col-form-label">로트 번호:</label>
+              <input type="text" class="form-control mb-2" v-model="lotNo" />
+            </div>
+            <div>
+              <label for="" class="col-form-label">고객사:</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="selectedCustomer"
+              />
+            </div>
+            <div>
+              <label for="" class="col-form-label">강종:</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="packingList[0].FIELD1"
+              />
+            </div>
+            <div>
+              <label for="" class="col-form-label">강도:</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="packingList[0].FIELD4"
+              />
+            </div>
+            <div>
+              <label for="" class="col-form-label">선경:</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="packingList[0].FIELD3"
+              />
+            </div>
+            <div>
+              <label for="" class="col-form-label">총 수량(EA):</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="packingList[0].countTotal"
+              />
+            </div>
+            <div>
+              <label for="" class="col-form-label">총 중량(kg):</label>
+              <input
+                type="text"
+                class="form-control mb-2"
+                v-model="packingList[0].sumTotal"
+              />
+            </div>
           </div>
           <div v-show="BoolDoDeleteShow === true">
             <label for="">고객사 삭제</label>
