@@ -60,7 +60,13 @@
       <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
       </button>
-      <button @click="lotNoFilter" class="btn btn-outline-primary">조회</button>
+      <button
+        :disabled="uploadCheck === false"
+        @click="lotNoFilter"
+        class="btn btn-outline-primary"
+      >
+        조회
+      </button>
       <input
         type="file"
         style="display: none"
@@ -281,8 +287,7 @@
       </template>
     </slot-modal>
   </div>
-  <div>
-    <!-- <simple-grid :headers="headers" :items="filteredLotNo" /> -->
+  <div class="p-5">
     <grid-pagination
       :headers="headers"
       :items="filteredLotNo"
@@ -347,7 +352,8 @@ export default {
         { title: '선경', key: 'FIELD3' },
         { title: '총 수량', key: 'countTotal' },
         { title: '총 중량', key: 'sumTotal' }
-      ]
+      ],
+      uploadCheck: false
     }
   },
   setup() {},
@@ -379,7 +385,7 @@ export default {
       }
       reader.readAsBinaryString(files[0])
       this.resultXlsxToJson = temp
-      // console.log('resultXlsxToJson:', this.resultXlsxToJson)
+      this.uploadCheck = true
     },
     addCustomer() {
       console.log(this.newCustomer)
@@ -448,7 +454,6 @@ export default {
       this.packingList[0].countTotal = count
     },
     doExcel() {
-      // console.log(this.packingList[0])
       this.$ExcelFromTable(
         this.headersPackingList,
         this.packingList,
