@@ -45,47 +45,71 @@
       <slot-modal modalId="staticBackdropCustomers">
         <template v-slot:title>고객사 관리</template>
         <template v-slot:body>
-          <div>
-            <div>
-              <label for="">고객사 추가</label>
-              <div>
-                <label for="">사업자 번호</label>
-                <input
-                  v-model="newCustomer.code"
-                  type="text"
-                  name=""
-                  ref="newCustomerModal"
-                />
-              </div>
-              <div>
-                <label for="">고객사 명</label>
-                <input
-                  v-model="newCustomer.company"
-                  type="text"
-                  name=""
-                  ref="newCustomerModal"
-                />
-              </div>
-              <button class="btn btn-primary" @click="addCustomer">추가</button>
+          <div class="modal-body p-5 pt-0">
+            <label for="" class="col-form-label fw-bold mb-0"
+              >고객사 추가</label
+            >
+            <div class="form-floating mb-3">
+              <input
+                v-model="newCustomer.code"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+                id="businessNumber"
+                placeholder="000-00-00000"
+                class="form-control rounded-3"
+              />
+              <label for="businessNumber">사업자 번호를 입력하세요!</label>
             </div>
-          </div>
-          <div>
-            <div>
+            <div class="form-floating mb-3">
+              <input
+                v-model="newCustomer.company"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+                id="companyName"
+                placeholder="고객사 명"
+                class="form-control rounded-3"
+              />
+              <label for="companyName">고객사 명을 입력하세요!</label>
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              @click="addCustomer"
+            >
+              저장
+            </button>
+            <hr class="my-4" />
+            <label for="" class="col-form-label fw-bold mb-0"
+              >고객사 삭제</label
+            >
+            <div class="form-floating mb-3">
               <input
                 type="search"
                 v-model.trim="searchName"
                 @keyup.enter="getCustomers"
+                id="getCompanyName"
                 placeholder="고객사 명"
+                class="form-control rounded-3"
               />
-              <button class="btn btn-primary" @click="getCustomers">
-                조회
-              </button>
+              <label for="getCompanyName">조회할 고객사 명을 입력하세요!</label>
             </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              @click="getCustomers"
+            >
+              조회
+            </button>
             <div v-if="searchName === ''">
-              <div :key="customer.code" v-for="customer in customers">
+              <div
+                :key="customer.code"
+                v-for="customer in customers"
+                class="mb-2"
+              >
                 <div v-if="customer.code !== 'none'">
                   <input
                     type="checkbox"
+                    class="form-check-input"
                     name=""
                     id=""
                     :value="customer"
@@ -96,10 +120,15 @@
               </div>
             </div>
             <div v-else>
-              <div :key="customer.code" v-for="customer in searchCustomers">
+              <div
+                :key="customer.code"
+                v-for="customer in searchCustomers"
+                class="mb-2"
+              >
                 <div v-if="customer.code !== 'none'">
                   <input
                     type="checkbox"
+                    class="form-check-input"
                     name=""
                     id=""
                     :value="customer"
@@ -109,7 +138,12 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-primary" @click="doDelete">삭제</button>
+            <button
+              class="w-100 btn btn-lg rounded-3 btn-danger"
+              @click="doDelete"
+            >
+              삭제
+            </button>
           </div>
         </template>
         <template v-slot:footer>
@@ -125,36 +159,60 @@
         <template v-slot:title>Packing List</template>
         <template v-slot:body>
           <div>
-            <label for="">날짜</label>
-            <input type="date" v-model="nowDate" />
+            <label for="" class="col-form-label">날짜:</label>
+            <input type="date" class="form-control" v-model="nowDate" />
           </div>
           <div>
-            <label for="">로트 번호</label>
-            <input type="text" v-model="lotNo" />
+            <label for="" class="col-form-label">로트 번호:</label>
+            <input type="text" class="form-control" v-model="lotNo" />
           </div>
           <div>
-            <label for="">고객사</label>
-            <input type="text" v-model="selectedCustomer" />
+            <label for="" class="col-form-label">고객사:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="selectedCustomer"
+            />
           </div>
           <div>
-            <label for="">강종</label>
-            <input type="text" v-model="packingList[0].FIELD1" />
+            <label for="" class="col-form-label">강종:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="packingList[0].FIELD1"
+            />
           </div>
           <div>
-            <label for="">강도</label>
-            <input type="text" v-model="packingList[0].FIELD4" />
+            <label for="" class="col-form-label">강도:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="packingList[0].FIELD4"
+            />
           </div>
           <div>
-            <label for="">선경</label>
-            <input type="text" v-model="packingList[0].FIELD3" />
+            <label for="" class="col-form-label">선경:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="packingList[0].FIELD3"
+            />
           </div>
           <div>
-            <label for="">총 수량</label>
-            <input type="text" v-model="packingList[0].countTotal" />
+            <label for="" class="col-form-label">총 수량:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="packingList[0].countTotal"
+            />
           </div>
           <div>
-            <label for="">총 중량</label>
-            <input type="text" v-model="packingList[0].sumTotal" />
+            <label for="" class="col-form-label">총 중량:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="packingList[0].sumTotal"
+            />
           </div>
           <div v-show="BoolDoDeleteShow === true">
             <label for="">고객사 삭제</label>
