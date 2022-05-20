@@ -16,7 +16,9 @@
       />
     </svg>
     <h2>Packing List 자동 생성</h2>
-    <div class="form-floating mt-5 mb-3">
+  </div>
+  <div class="p-5">
+    <div class="form-floating mb-3">
       <input
         v-model="lotNo"
         type="text"
@@ -52,30 +54,28 @@
         고객사 관리
       </button>
     </div>
-    <div>
-      <div class="button-group mt-5 mb-3">
-        <button @click="$refs.file.click()" class="btn btn-outline-primary">
-          엑셀업로드
-        </button>
-        <button @click="lotNoFilter" class="btn btn-outline-secondary">
-          조회
-        </button>
-        <input
-          type="file"
-          style="display: none"
-          ref="file"
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-          @change="readFile"
-        />
-        <button
-          :disabled="selectedCustomer === ''"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          class="btn btn-primary"
-        >
-          Packing List 생성
-        </button>
-      </div>
+  </div>
+  <div class="text-center">
+    <div class="btn-group mt-5 mb-3">
+      <button @click="$refs.file.click()" class="btn btn-outline-primary">
+        엑셀업로드
+      </button>
+      <button @click="lotNoFilter" class="btn btn-outline-primary">조회</button>
+      <input
+        type="file"
+        style="display: none"
+        ref="file"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        @change="readFile"
+      />
+      <button
+        :disabled="resultXlsxToJson.length === 0"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        class="btn btn-outline-primary"
+      >
+        Packing List 생성
+      </button>
     </div>
   </div>
   <!-- 고객사 관리 모달 -->
@@ -379,7 +379,7 @@ export default {
       }
       reader.readAsBinaryString(files[0])
       this.resultXlsxToJson = temp
-      // console.log(this.resultXlsxToJson)
+      // console.log('resultXlsxToJson:', this.resultXlsxToJson)
     },
     addCustomer() {
       console.log(this.newCustomer)
@@ -399,6 +399,7 @@ export default {
       this.searchName = ''
     },
     lotNoFilter() {
+      console.log('filteredLotNo:', this.filteredLotNo)
       const tempFilteredLotNo = []
       for (let tempResult of this.resultXlsxToJson) {
         tempFilteredLotNo.push(

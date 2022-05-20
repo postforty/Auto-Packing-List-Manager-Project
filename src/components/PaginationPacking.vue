@@ -1,7 +1,7 @@
 <template>
   <!-- BEGIN pagination -->
   <nav aria-label="Page navigation example">
-    <div>
+    <div class="d-flex justify-content-center">
       <ul class="pagination">
         <li
           class="page-item"
@@ -31,8 +31,8 @@
         </li>
       </ul>
     </div>
-    <div>
-      <span>표시개수 : </span>
+    <div class="d-flex align-items-right justify-content-right">
+      <span class="fs-6 me-1" style="width: 80px">표시개수 : </span>
       <select
         class="form-select form-select-sm"
         v-model="resultPerPage"
