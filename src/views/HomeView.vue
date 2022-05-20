@@ -1,32 +1,55 @@
 <template>
-  <div>
-    <h1>Packing List 자동 생성</h1>
-    <div>
-      <label for="">로트번호 입력</label>
-      <input v-model="lotNo" type="text" name="" id="" />
+  <div class="py-5 text-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="48"
+      height="48"
+      fill="currentColor"
+      class="bi bi-file-earmark-text mb-4"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"
+      />
+      <path
+        d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"
+      />
+    </svg>
+    <h2>Packing List 자동 생성</h2>
+    <div class="form-floating mb-3">
+      <input
+        v-model="lotNo"
+        type="text"
+        name=""
+        ref="newCustomerModal"
+        id="lotNo"
+        placeholder="로트 번호"
+        class="form-control rounded-3"
+      />
+      <label for="lotNo">로트 번호를 입력하세요!</label>
     </div>
-    <label for="">고객사 선택</label>
-    <select v-model="selectedCustomer">
-      <option
-        :key="customer.code"
-        v-for="customer in customers"
-        :value="customer.company"
+    <div class="input-group form-floating">
+      <select
+        v-model="selectedCustomer"
+        class="form-select form-select"
+        aria-label=".form-select example"
+        id="selectCompany"
       >
-        {{ customer.company }}
-      </option>
-    </select>
-    <div>
-      <button data-bs-toggle="modal" data-bs-target="#staticBackdropCustomers">
-        고객사 관리
-      </button>
-    </div>
-    <div>
+        <option
+          :key="customer.code"
+          v-for="customer in customers"
+          :value="customer.company"
+        >
+          {{ customer.company }}
+        </option>
+      </select>
+      <label for="selectCompany">고객사를 선택하세요!</label>
       <button
-        v-show="selectedCustomer !== '=== 선택 ==='"
+        class="btn btn-lg btn-secondary"
         data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
+        data-bs-target="#staticBackdropCustomers"
       >
-        Packing List 생성
+        고객사 관리
       </button>
     </div>
     <div>
@@ -39,6 +62,13 @@
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         @change="readFile"
       />
+      <button
+        :disabled="selectedCustomer === '=== 선택 ==='"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+      >
+        Packing List 생성
+      </button>
     </div>
     <!-- 고객사 관리 모달 -->
     <div>
@@ -277,7 +307,7 @@ export default {
         { code: '002-00-00000', company: 'B사', isChecked: false },
         { code: '003-00-00000', company: 'C사', isChecked: false }
       ],
-      selectedCustomer: '=== 선택 ===',
+      selectedCustomer: '고객사를 선택하세요!',
       newCustomer: { code: '', company: '', isChecked: false },
       pureCustomers: [],
       checkedCustomers: [],
@@ -324,7 +354,7 @@ export default {
     this.pureCustomers = this.customers.slice()
     this.customers.unshift({
       code: 'none',
-      company: '=== 선택 ===',
+      company: '고객사를 선택하세요!',
       isChecked: false
     })
   },
@@ -467,7 +497,7 @@ export default {
 }
 .list-group-item-check:checked + .list-group-item {
   color: #fff;
-  background-color: var(--bs-blue);
+  background-color: var(--bs-yellow);
 }
 .list-group-item-check[disabled] + .list-group-item,
 .list-group-item-check:disabled + .list-group-item {
