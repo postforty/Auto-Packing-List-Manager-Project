@@ -394,14 +394,17 @@ export default {
       this.newCustomer = { code: '', company: '', isChecked: false }
     },
     doDelete() {
-      let tempCustomers = []
-      this.customers.forEach((customer) => {
-        if (!customer.isChecked) {
-          tempCustomers.push(customer)
-        }
-      })
-      this.customers = tempCustomers
-      tempCustomers = []
+      this.customers = this.customers.filter((customer) => !customer.isChecked)
+      console.log('doDeleteMap: ', this.customers)
+
+      // let tempCustomers = []
+      // this.customers.forEach((customer) => {
+      //   if (!customer.isChecked) {
+      //     tempCustomers.push(customer)
+      //   }
+      // })
+      // this.customers = tempCustomers
+      // tempCustomers = []
       this.searchName = ''
     },
     lotNoFilter() {
