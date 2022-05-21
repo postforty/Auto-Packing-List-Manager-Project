@@ -208,57 +208,77 @@
       <template v-slot:body>
         <div class="modal-body p-3 pt-0">
           <div>
-            <label for="" class="col-form-label">날짜:</label>
-            <input type="date" class="form-control mb-2" v-model="nowDate" />
+            <label for="packingDate" class="col-form-label">날짜:</label>
+            <input
+              type="date"
+              id="packingDate"
+              class="form-control mb-2"
+              v-model="nowDate"
+            />
           </div>
           <div>
-            <label for="" class="col-form-label">로트 번호:</label>
-            <input type="text" class="form-control mb-2" v-model="lotNo" />
-          </div>
-          <div>
-            <label for="" class="col-form-label">고객사:</label>
+            <label for="productLotNo" class="col-form-label">로트 번호:</label>
             <input
               type="text"
+              id="productLotNo"
+              class="form-control mb-2"
+              v-model="lotNo"
+            />
+          </div>
+          <div>
+            <label for="packingCompanyName" class="col-form-label"
+              >고객사:</label
+            >
+            <input
+              type="text"
+              id="packingCompanyName"
               class="form-control mb-2"
               v-model="selectedCustomer"
             />
           </div>
           <div>
-            <label for="" class="col-form-label">강종:</label>
+            <label for="productKinds" class="col-form-label">강종:</label>
             <input
               type="text"
+              id="productKinds"
               class="form-control mb-2"
               v-model="packingList[0].FIELD1"
             />
           </div>
           <div>
-            <label for="" class="col-form-label">강도:</label>
+            <label for="productCharacteristic" class="col-form-label"
+              >강도:</label
+            >
             <input
               type="text"
+              id="productCharacteristic"
               class="form-control mb-2"
               v-model="packingList[0].FIELD4"
             />
           </div>
           <div>
-            <label for="" class="col-form-label">선경:</label>
+            <label for="productThickness" class="col-form-label">선경:</label>
             <input
               type="text"
+              id="productThickness"
               class="form-control mb-2"
               v-model="packingList[0].FIELD3"
             />
           </div>
           <div>
-            <label for="" class="col-form-label">총 수량(EA):</label>
+            <label for="totalCount" class="col-form-label">총 수량(EA):</label>
             <input
               type="text"
+              id="totalCount"
               class="form-control mb-2"
               v-model="packingList[0].countTotal"
             />
           </div>
           <div>
-            <label for="" class="col-form-label">총 중량(kg):</label>
+            <label for="totalSum" class="col-form-label">총 중량(kg):</label>
             <input
               type="text"
+              id="totalSum"
               class="form-control mb-2"
               v-model="packingList[0].sumTotal"
             />
@@ -395,7 +415,7 @@ export default {
     },
     doDelete() {
       this.customers = this.customers.filter((customer) => !customer.isChecked)
-      console.log('doDeleteMap: ', this.customers)
+      console.log('doDeleteFilter: ', this.customers)
 
       // let tempCustomers = []
       // this.customers.forEach((customer) => {
@@ -405,6 +425,7 @@ export default {
       // })
       // this.customers = tempCustomers
       // tempCustomers = []
+
       this.searchName = ''
     },
     lotNoFilter() {
@@ -431,7 +452,7 @@ export default {
     getCustomers() {
       let tempCustomers = []
       this.customers.forEach((customer) => {
-        if (customer.company === this.searchName) {
+        if (customer.company.includes(this.searchName)) {
           tempCustomers.push(customer)
         }
       })
