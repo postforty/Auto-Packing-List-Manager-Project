@@ -504,7 +504,7 @@ export default {
       var blob = new Blob([JSON.stringify(this.customers, null, 2)], {
         type: 'text/plain;charset=utf-8'
       })
-      FileSaver.saveAs(blob, 'customers.json', { autoBom: true })
+      FileSaver.saveAs(blob, 'customers.json')
     }
   }
 }

@@ -13,5 +13,10 @@
     "code": "003-00-00000",
     "company": "C사",
     "isChecked": false
+  },
+  {
+    "code": "005-00-00000",
+    "company": "D사",
+    "isChecked": false
   }
 ]
