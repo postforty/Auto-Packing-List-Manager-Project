@@ -342,7 +342,7 @@ export default {
   data() {
     return {
       lotNo: '',
-      customers: customersData.customers,
+      customers: customersData,
       selectedCustomer: '',
       newCustomer: { code: '', company: '', isChecked: false },
       checkedCustomers: [],
@@ -389,7 +389,6 @@ export default {
   created() {},
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
-    this.exportTextFile()
   },
   unmounted() {},
   methods: {
@@ -415,10 +414,12 @@ export default {
       this.customers.push(this.newCustomer)
       this.BoolAddCustomerShow = false
       this.newCustomer = { code: '', company: '', isChecked: false }
+      this.exportTextFile()
     },
     doDelete() {
       this.customers = this.customers.filter((customer) => !customer.isChecked)
       console.log('doDeleteFilter: ', this.customers)
+      this.exportTextFile()
 
       // let tempCustomers = []
       // this.customers.forEach((customer) => {
@@ -499,18 +500,11 @@ export default {
       }
     },
     exportTextFile() {
-      console.log('exportTextFile: ', this.customers)
-      const text = document.getElementById(this.customers)
-      // 저장하고자하는 파일명
-      const filename = 'test.txt'
-      const element = document.createElement('a')
-      element.setAttribute(
-        'href',
-        'data:text/plain;charset=utf-8, ' + encodeURIComponent(text)
-      )
-      element.setAttribute('download', filename)
-      document.body.appendChild(element)
-      element.click()
+      var FileSaver = require('file-saver')
+      var blob = new Blob([JSON.stringify(this.customers, null, 2)], {
+        type: 'text/plain;charset=utf-8'
+      })
+      FileSaver.saveAs(blob, 'customers.json', { autoBom: true })
     }
   }
 }
