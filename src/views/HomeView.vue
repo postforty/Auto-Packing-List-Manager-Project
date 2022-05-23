@@ -332,6 +332,7 @@
 import GridPagination from '@/components/layouts/GridPagination.vue'
 // import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
 import SlotModal from '@/components/fragments/SlotModal.vue'
+import customersData from '@/jsonData/customers.json'
 import XLSX from 'xlsx'
 import printJS from 'print-js'
 
@@ -341,11 +342,7 @@ export default {
   data() {
     return {
       lotNo: '',
-      customers: [
-        { code: '001-00-00000', company: 'A사', isChecked: false },
-        { code: '002-00-00000', company: 'B사', isChecked: false },
-        { code: '003-00-00000', company: 'C사', isChecked: false }
-      ],
+      customers: customersData,
       selectedCustomer: '',
       newCustomer: { code: '', company: '', isChecked: false },
       pureCustomers: [],
@@ -392,11 +389,6 @@ export default {
   setup() {},
   created() {
     this.pureCustomers = this.customers.slice()
-    // this.customers.unshift({
-    //   code: 'none',
-    //   company: '고객사를 선택하세요!',
-    //   isChecked: false
-    // })
   },
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
