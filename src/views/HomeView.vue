@@ -332,7 +332,7 @@
 import GridPagination from '@/components/layouts/GridPagination.vue'
 // import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
 import SlotModal from '@/components/fragments/SlotModal.vue'
-import customersData from '@/jsonData/customers.json'
+import customersData from '@/assets/jsonData/customers.json'
 import XLSX from 'xlsx'
 import printJS from 'print-js'
 
@@ -342,10 +342,9 @@ export default {
   data() {
     return {
       lotNo: '',
-      customers: customersData,
+      customers: customersData.customers,
       selectedCustomer: '',
       newCustomer: { code: '', company: '', isChecked: false },
-      pureCustomers: [],
       checkedCustomers: [],
       resultXlsxToJson: [],
       filteredLotNo: [],
@@ -387,11 +386,10 @@ export default {
     }
   },
   setup() {},
-  created() {
-    this.pureCustomers = this.customers.slice()
-  },
+  created() {},
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
+    this.exportTextFile()
   },
   unmounted() {},
   methods: {
@@ -499,6 +497,20 @@ export default {
       } else if (method === 'sendMessage') {
         this.sendMessage(id)
       }
+    },
+    exportTextFile() {
+      console.log('exportTextFile: ', this.customers)
+      const text = document.getElementById(this.customers)
+      // 저장하고자하는 파일명
+      const filename = 'test.txt'
+      const element = document.createElement('a')
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8, ' + encodeURIComponent(text)
+      )
+      element.setAttribute('download', filename)
+      document.body.appendChild(element)
+      element.click()
     }
   }
 }

@@ -1,0 +1,7 @@
+{
+  "customers": [
+    { "code": "001-00-00000", "company": "A사", "isChecked": false },
+    { "code": "002-00-00000", "company": "B사", "isChecked": false },
+    { "code": "003-00-00000", "company": "C사", "isChecked": false }
+  ]
+}
