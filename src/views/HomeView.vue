@@ -332,7 +332,7 @@
 import GridPagination from '@/components/layouts/GridPagination.vue'
 // import SimpleGrid from '@/components/fragments/SimpleGrid.vue'
 import SlotModal from '@/components/fragments/SlotModal.vue'
-import customersData from '@/assets/jsonData/customers.json'
+// import customersData from '@/assets/jsonData/customers.json'
 import XLSX from 'xlsx'
 import printJS from 'print-js'
 
@@ -342,7 +342,8 @@ export default {
   data() {
     return {
       lotNo: '',
-      customers: customersData,
+      // customers: customersData,
+      customers: [],
       selectedCustomer: '',
       newCustomer: { code: '', company: '', isChecked: false },
       checkedCustomers: [],
@@ -389,6 +390,8 @@ export default {
   created() {},
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
+    this.customers = this.$get('/customers')
+    console.log(this.customers)
   },
   unmounted() {},
   methods: {
@@ -505,6 +508,9 @@ export default {
         type: 'text/plain;charset=utf-8'
       })
       FileSaver.saveAs(blob, 'customers.json')
+    },
+    async getCustomersServer() {
+      this.customers = await this.$get('/customers')
     }
   }
 }

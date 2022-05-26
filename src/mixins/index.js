@@ -1,6 +1,9 @@
-// import axios from 'axios'
+import axios from 'axios'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
+axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+axios.defaults.headers['Access-Control-Allow-Origin'] = '*'
 
 export default {
   created() {},
@@ -9,13 +12,13 @@ export default {
   },
   unmounted() {},
   methods: {
-    // async $get(url) {
-    //   return (
-    //     await axios.get(url).catch((e) => {
-    //       console.log(e)
-    //     })
-    //   ).data
-    // },
+    async $get(url) {
+      return (
+        await axios.get(url).catch((e) => {
+          console.log(e)
+        })
+      ).data
+    },
     // async $post(url, data) {
     //   return await axios.post(url, data).catch((e) => {
     //     console.log(e)
