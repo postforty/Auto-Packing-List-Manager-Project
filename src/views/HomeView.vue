@@ -390,8 +390,7 @@ export default {
   created() {},
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
-    this.customers = this.$get('/customers')
-    console.log(this.customers)
+    this.getCustomersServer()
   },
   unmounted() {},
   methods: {
