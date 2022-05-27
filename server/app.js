@@ -40,8 +40,8 @@ app.post('/customers', (req, res) => {
       if (err) {
         throw err
       }
-      const data = fs.readFileSync('./data/customers.json', 'utf-8')
-      console.log(data)
+      // const data = fs.readFileSync('./data/customers.json', 'utf-8')
+      // console.log(data)
     }
   )
   res.send('Ok')

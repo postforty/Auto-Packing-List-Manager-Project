@@ -412,7 +412,7 @@ export default {
       this.uploadCheck = true
     },
     addCustomer() {
-      console.log(this.newCustomer)
+      // console.log(this.newCustomer)
       this.customers.push(this.newCustomer)
       this.BoolAddCustomerShow = false
       this.newCustomer = { code: '', company: '', isChecked: false }
@@ -421,8 +421,9 @@ export default {
     },
     doDelete() {
       this.customers = this.customers.filter((customer) => !customer.isChecked)
-      console.log('doDeleteFilter: ', this.customers)
-      this.exportTextFile()
+      // console.log('doDeleteFilter: ', this.customers)
+      // this.exportTextFile()
+      this.postCustomersServer()
 
       // let tempCustomers = []
       // this.customers.forEach((customer) => {
