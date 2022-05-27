@@ -119,7 +119,7 @@
           </div>
           <button
             class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-            @click="addCustomer"
+            @click="postCustomersServer"
           >
             저장
           </button>
@@ -511,6 +511,9 @@ export default {
     async getCustomersServer() {
       this.customers = await this.$get('/customers')
       // console.log(await this.$get('/customers'))
+    },
+    async postCustomersServer() {
+      await this.$post('/customers', this.newCustomer)
     }
   }
 }

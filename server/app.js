@@ -32,6 +32,7 @@ app.get('/customers', (req, res) => {
 })
 
 app.post('/customers', (req, res) => {
-  console.log(req.body.param)
+  console.log(req.body)
+  // fs.appendFileSync('./data/customers.json', req.body)
   res.send('Ok')
 })
