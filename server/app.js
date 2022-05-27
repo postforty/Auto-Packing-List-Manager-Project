@@ -32,7 +32,17 @@ app.get('/customers', (req, res) => {
 })
 
 app.post('/customers', (req, res) => {
-  console.log(req.body)
-  // fs.appendFileSync('./data/customers.json', req.body)
+  fs.writeFile(
+    './data/customers.json',
+    JSON.stringify(req.body),
+    'utf8',
+    (err) => {
+      if (err) {
+        throw err
+      }
+      const data = fs.readFileSync('./data/customers.json', 'utf-8')
+      console.log(data)
+    }
+  )
   res.send('Ok')
 })

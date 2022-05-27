@@ -119,7 +119,7 @@
           </div>
           <button
             class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-            @click="postCustomersServer"
+            @click="addCustomer"
           >
             저장
           </button>
@@ -416,7 +416,8 @@ export default {
       this.customers.push(this.newCustomer)
       this.BoolAddCustomerShow = false
       this.newCustomer = { code: '', company: '', isChecked: false }
-      this.exportTextFile()
+      // this.exportTextFile()
+      this.postCustomersServer()
     },
     doDelete() {
       this.customers = this.customers.filter((customer) => !customer.isChecked)
@@ -513,7 +514,7 @@ export default {
       // console.log(await this.$get('/customers'))
     },
     async postCustomersServer() {
-      await this.$post('/customers', this.newCustomer)
+      await this.$post('/customers', this.customers)
     }
   }
 }
