@@ -510,6 +510,7 @@ export default {
     },
     async getCustomersServer() {
       this.customers = await this.$get('/customers')
+      // console.log(await this.$get('/customers'))
     }
   }
 }
