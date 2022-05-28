@@ -1,8 +1,14 @@
 // express
-const express = require('express')
+import express from 'express'
 const app = express()
-const fs = require('fs')
-const cors = require('cors')
+import fs from 'fs'
+// import { readFileSync } from 'fs'
+import cors from 'cors'
+import MDBReader from 'mdb-reader'
+// const express = require('express')
+// const app = express()
+// const fs = require('fs')
+// const cors = require('cors')
 
 app.use(
   express.json({
@@ -45,4 +51,18 @@ app.post('/customers', (req, res) => {
     }
   )
   res.send('Ok')
+})
+
+app.get('/mdb', (req, res) => {
+  const buffer = fs.readFileSync('./data/IDCMAINDB.mdb')
+  const reader = new MDBReader(buffer)
+
+  reader.getTableNames() // ['Cats', 'Dogs', 'Cars']
+
+  const table = reader.getTable('TWEIGHT')
+  table.getColumnNames() // ['id', 'name', 'color']
+  table.getData() // [{id: 5, name: 'Ashley', color: 'black'}, ...]
+
+  // console.log(table.getData())
+  res.send(table.getData())
 })

@@ -348,6 +348,7 @@ export default {
       newCustomer: { code: '', company: '', isChecked: false },
       checkedCustomers: [],
       resultXlsxToJson: [],
+      resultMdbToJson: [],
       filteredLotNo: [],
       packingList: [
         {
@@ -391,6 +392,7 @@ export default {
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
     this.getCustomersServer()
+    this.getMdbServer()
   },
   unmounted() {},
   methods: {
@@ -410,6 +412,7 @@ export default {
       reader.readAsBinaryString(files[0])
       this.resultXlsxToJson = temp
       this.uploadCheck = true
+      // console.log(this.resultXlsxToJson)
     },
     addCustomer() {
       // console.log(this.newCustomer)
@@ -516,6 +519,10 @@ export default {
     },
     async postCustomersServer() {
       await this.$post('/customers', this.customers)
+    },
+    async getMdbServer() {
+      this.resultMdbToJson = await this.$get('/mdb')
+      // console.log('getMdbServer : ', await this.$get('/mdb'))
     }
   }
 }
