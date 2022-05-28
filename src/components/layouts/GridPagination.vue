@@ -1,5 +1,5 @@
 <template>
-  <div v-if="items[0] !== undefined">
+  <div v-if="items !== undefined">
     <simple-grid
       :headers="headers"
       :items="items"
@@ -8,7 +8,7 @@
       @click-buttons="handleClickButtons"
     />
     <pagination-packing
-      :itemCount="items[0].length"
+      :itemCount="items.length"
       @change-page="changePage"
       :items="items"
     />

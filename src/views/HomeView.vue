@@ -60,11 +60,7 @@
       <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
       </button>
-      <button
-        :disabled="uploadCheck === false"
-        @click="lotNoFilter"
-        class="btn btn-outline-primary"
-      >
+      <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
         조회
       </button>
       <input
@@ -75,7 +71,7 @@
         @change="readFile"
       />
       <button
-        :disabled="resultXlsxToJson.length === 0"
+        :disabled="packingChk === false"
         data-bs-toggle="modal"
         data-bs-target="#staticBackdrop"
         class="btn btn-outline-primary"
@@ -384,7 +380,7 @@ export default {
         { title: '총 수량', key: 'countTotal' },
         { title: '총 중량', key: 'sumTotal' }
       ],
-      uploadCheck: false
+      packingChk: false
     }
   },
   setup() {},
@@ -473,18 +469,16 @@ export default {
     packingComputed() {
       let tempSumTotalValue = 0
       let count = 0
-      for (let resultArray of this.filteredLotNo) {
-        for (let reultObject of resultArray) {
-          tempSumTotalValue += Number(reultObject.GROSS_WEIGHT)
-          count++
-        }
+      for (let reultObject of this.filteredLotNo) {
+        tempSumTotalValue += Number(reultObject.GROSS_WEIGHT)
+        count++
       }
       this.packingList[0].selectedDate = this.nowDate
       this.packingList[0].lotNo = this.lotNo
       this.packingList[0].customer = this.selectedCustomer
-      this.packingList[0].FIELD1 = this.filteredLotNo[0][0].FIELD1
-      this.packingList[0].FIELD4 = this.filteredLotNo[0][0].FIELD4
-      this.packingList[0].FIELD3 = this.filteredLotNo[0][0].FIELD3
+      this.packingList[0].FIELD1 = this.filteredLotNo[0].FIELD1
+      this.packingList[0].FIELD4 = this.filteredLotNo[0].FIELD4
+      this.packingList[0].FIELD3 = this.filteredLotNo[0].FIELD3
       this.packingList[0].sumTotal = tempSumTotalValue.toFixed(1)
       this.packingList[0].countTotal = count
     },
@@ -515,14 +509,25 @@ export default {
     },
     async getCustomersServer() {
       this.customers = await this.$get('/customers')
-      // console.log(await this.$get('/customers'))
     },
     async postCustomersServer() {
       await this.$post('/customers', this.customers)
     },
     async getMdbServer() {
       this.resultMdbToJson = await this.$get('/mdb')
-      // console.log('getMdbServer : ', await this.$get('/mdb'))
+      this.filteredLotNo = this.resultMdbToJson
+    },
+    lotNoFilterMdb() {
+      if (this.lotNo === '') {
+        this.getMdbServer()
+        this.packingChk = false
+      } else {
+        this.filteredLotNo = this.resultMdbToJson.filter(
+          (rst) => rst.FIELD2 === this.lotNo
+        )
+        this.packingChk = true
+      }
+      this.packingComputed()
     }
   }
 }

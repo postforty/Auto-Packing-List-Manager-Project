@@ -51,8 +51,8 @@ export default {
   created() {},
   computed: {
     formattedItems: function () {
-      console.log('grid: ', this.items[0].length)
-      return this.items[0].slice(this.sliceStart, this.sliceEnd)
+      // console.log('grid: ', this.items.length)
+      return this.items.slice(this.sliceStart, this.sliceEnd)
     }
   },
   mounted() {},
