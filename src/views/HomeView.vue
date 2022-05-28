@@ -413,7 +413,6 @@ export default {
   methods: {
     // xlsx to json
     readFile(e) {
-      console.log(this.resultXlsxToJson.length)
       let files = e.target.files
       let reader = new FileReader()
       const temp = []
@@ -427,7 +426,9 @@ export default {
       }
       reader.readAsBinaryString(files[0])
       this.resultXlsxToJson = temp
-      // console.log(this.resultXlsxToJson)
+      this.$refs.file.value = ''
+      this.lotNoFilter()
+      console.log('readFile 실행 완료')
     },
     xlsxUnmount() {
       this.resultXlsxToJson = []
@@ -531,6 +532,7 @@ export default {
       this.filteredLotNo = this.resultMdbToJson
     },
     lotNoFilter() {
+      console.log('lotNoFilter 시작')
       if (this.lotNo === '') {
         this.filteredLotNo = this.resultXlsxToJson[0]
         this.packingChk = false
