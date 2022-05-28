@@ -56,10 +56,10 @@
     </div>
   </div>
   <div class="text-center">
-    <div class="btn-group mt-5 mb-3">
-      <button @click="$refs.file.click()" class="btn btn-outline-primary">
+    <div class="btn-group mt-5 mb-3 col-6 mx-auto">
+      <!-- <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
-      </button>
+      </button> -->
       <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
         조회
       </button>
@@ -76,7 +76,7 @@
         data-bs-target="#staticBackdrop"
         class="btn btn-outline-primary"
       >
-        Packing List 생성
+        Packing List
       </button>
     </div>
   </div>
@@ -393,23 +393,23 @@ export default {
   unmounted() {},
   methods: {
     // xlsx to json
-    readFile(e) {
-      let files = e.target.files
-      let reader = new FileReader()
-      const temp = []
-      reader.onload = function (e) {
-        let data = e.target.result
-        let workBook = XLSX.read(data, { type: 'binary' })
-        workBook.SheetNames.forEach(function (sheetName) {
-          let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
-          temp.push(xlsxToJson)
-        })
-      }
-      reader.readAsBinaryString(files[0])
-      this.resultXlsxToJson = temp
-      this.uploadCheck = true
-      // console.log(this.resultXlsxToJson)
-    },
+    // readFile(e) {
+    //   let files = e.target.files
+    //   let reader = new FileReader()
+    //   const temp = []
+    //   reader.onload = function (e) {
+    //     let data = e.target.result
+    //     let workBook = XLSX.read(data, { type: 'binary' })
+    //     workBook.SheetNames.forEach(function (sheetName) {
+    //       let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
+    //       temp.push(xlsxToJson)
+    //     })
+    //   }
+    //   reader.readAsBinaryString(files[0])
+    //   this.resultXlsxToJson = temp
+    //   this.uploadCheck = true
+    //   // console.log(this.resultXlsxToJson)
+    // },
     addCustomer() {
       // console.log(this.newCustomer)
       this.customers.push(this.newCustomer)
@@ -434,17 +434,6 @@ export default {
       // tempCustomers = []
 
       this.searchName = ''
-    },
-    lotNoFilter() {
-      console.log('filteredLotNo:', this.filteredLotNo)
-      const tempFilteredLotNo = []
-      for (let tempResult of this.resultXlsxToJson) {
-        tempFilteredLotNo.push(
-          tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
-        )
-      }
-      this.filteredLotNo = tempFilteredLotNo
-      this.packingComputed()
     },
     addCustomerShow() {
       if (this.BoolAddCustomerShow === false) {
@@ -500,13 +489,13 @@ export default {
         this.sendMessage(id)
       }
     },
-    exportTextFile() {
-      var FileSaver = require('file-saver')
-      var blob = new Blob([JSON.stringify(this.customers, null, 2)], {
-        type: 'text/plain;charset=utf-8'
-      })
-      FileSaver.saveAs(blob, 'customers.json')
-    },
+    // exportTextFile() {
+    //   var FileSaver = require('file-saver')
+    //   var blob = new Blob([JSON.stringify(this.customers, null, 2)], {
+    //     type: 'text/plain;charset=utf-8'
+    //   })
+    //   FileSaver.saveAs(blob, 'customers.json')
+    // },
     async getCustomersServer() {
       this.customers = await this.$get('/customers')
     },
@@ -517,6 +506,17 @@ export default {
       this.resultMdbToJson = await this.$get('/mdb')
       this.filteredLotNo = this.resultMdbToJson
     },
+    // lotNoFilter() {
+    //   console.log('filteredLotNo:', this.filteredLotNo)
+    //   const tempFilteredLotNo = []
+    //   for (let tempResult of this.resultXlsxToJson) {
+    //     tempFilteredLotNo.push(
+    //       tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
+    //     )
+    //   }
+    //   this.filteredLotNo = tempFilteredLotNo
+    //   this.packingComputed()
+    // },
     lotNoFilterMdb() {
       if (this.lotNo === '') {
         this.getMdbServer()

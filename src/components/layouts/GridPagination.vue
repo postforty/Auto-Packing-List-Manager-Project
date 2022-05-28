@@ -45,7 +45,7 @@ export default {
   unmounted() {},
   methods: {
     changePage(start, end) {
-      console.log('changePage', start, end)
+      // console.log('changePage', start, end)
       this.sliceStart = start
       this.sliceEnd = end
     },

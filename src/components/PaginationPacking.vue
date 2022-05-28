@@ -86,8 +86,8 @@ export default {
   },
   computed: {
     calPageList: function () {
-      console.log('pageList: ', this.pageList)
-      console.log('itemCount: ', this.itemCount)
+      // console.log('pageList: ', this.pageList)
+      // console.log('itemCount: ', this.itemCount)
       return this.pageList.slice(this.start - 1, this.end)
     }
   },
