@@ -55,13 +55,33 @@
       </button>
     </div>
   </div>
-  <div class="text-center">
-    <div class="btn-group mt-5 mb-3 col-6 mx-auto">
+  <div class="p-5 text-center">
+    <div class="btn-group col-6 mx-auto">
       <!-- <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
       </button> -->
       <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
         조회
+      </button>
+      <!-- <input
+        type="file"
+        style="display: none"
+        ref="file"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        @change="readFile"
+      /> -->
+      <button
+        :disabled="packingChk === false"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        class="btn btn-outline-primary"
+      >
+        Packing List
+      </button>
+    </div>
+    <div class="btn-group col-3 mx-auto">
+      <button @click="$refs.file.click()" class="btn btn-outline-primary">
+        엑셀 불러오기
       </button>
       <input
         type="file"
@@ -71,12 +91,11 @@
         @change="readFile"
       />
       <button
-        :disabled="packingChk === false"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
+        :disabled="resultXlsxToJson.length === 0"
+        @click="xlsxUnmount"
         class="btn btn-outline-primary"
       >
-        Packing List
+        엑셀 해제하기
       </button>
     </div>
   </div>
@@ -393,23 +412,28 @@ export default {
   unmounted() {},
   methods: {
     // xlsx to json
-    // readFile(e) {
-    //   let files = e.target.files
-    //   let reader = new FileReader()
-    //   const temp = []
-    //   reader.onload = function (e) {
-    //     let data = e.target.result
-    //     let workBook = XLSX.read(data, { type: 'binary' })
-    //     workBook.SheetNames.forEach(function (sheetName) {
-    //       let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
-    //       temp.push(xlsxToJson)
-    //     })
-    //   }
-    //   reader.readAsBinaryString(files[0])
-    //   this.resultXlsxToJson = temp
-    //   this.uploadCheck = true
-    //   // console.log(this.resultXlsxToJson)
-    // },
+    readFile(e) {
+      console.log(this.resultXlsxToJson.length)
+      let files = e.target.files
+      let reader = new FileReader()
+      const temp = []
+      reader.onload = function (e) {
+        let data = e.target.result
+        let workBook = XLSX.read(data, { type: 'binary' })
+        workBook.SheetNames.forEach(function (sheetName) {
+          let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
+          temp.push(xlsxToJson)
+        })
+      }
+      reader.readAsBinaryString(files[0])
+      this.resultXlsxToJson = temp
+      // console.log(this.resultXlsxToJson)
+    },
+    xlsxUnmount() {
+      this.resultXlsxToJson = []
+      console.log('xlsxUnmount: ', this.resultXlsxToJson.length)
+      this.getMdbServer()
+    },
     addCustomer() {
       // console.log(this.newCustomer)
       this.customers.push(this.newCustomer)
@@ -506,21 +530,28 @@ export default {
       this.resultMdbToJson = await this.$get('/mdb')
       this.filteredLotNo = this.resultMdbToJson
     },
-    // lotNoFilter() {
-    //   console.log('filteredLotNo:', this.filteredLotNo)
-    //   const tempFilteredLotNo = []
-    //   for (let tempResult of this.resultXlsxToJson) {
-    //     tempFilteredLotNo.push(
-    //       tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
-    //     )
-    //   }
-    //   this.filteredLotNo = tempFilteredLotNo
-    //   this.packingComputed()
-    // },
-    lotNoFilterMdb() {
+    lotNoFilter() {
       if (this.lotNo === '') {
+        this.filteredLotNo = this.resultXlsxToJson[0]
+        this.packingChk = false
+      } else {
+        const tempFilteredLotNo = []
+        for (let tempResult of this.resultXlsxToJson) {
+          tempFilteredLotNo.push(
+            tempResult.filter((rst) => rst.FIELD2 === this.lotNo)
+          )
+        }
+        this.filteredLotNo = tempFilteredLotNo[0]
+        this.packingChk = true
+      }
+      this.packingComputed()
+    },
+    lotNoFilterMdb() {
+      if (this.lotNo === '' && this.resultXlsxToJson.length === 0) {
         this.getMdbServer()
         this.packingChk = false
+      } else if (this.resultXlsxToJson.length > 0) {
+        this.lotNoFilter()
       } else {
         this.filteredLotNo = this.resultMdbToJson.filter(
           (rst) => rst.FIELD2 === this.lotNo
