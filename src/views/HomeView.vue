@@ -30,29 +30,52 @@
       />
       <label for="lotNo">로트 번호를 입력하세요!</label>
     </div>
-    <div class="input-group form-floating">
-      <select
-        v-model="selectedCustomer"
-        class="form-select form-select"
-        aria-label=".form-select example"
-        id="selectCompany"
-      >
-        <option
-          :key="customer.code"
-          v-for="customer in customers"
-          :value="customer.company"
+    <div>
+      <div class="input-group form-floating">
+        <select
+          v-model="selectedCustomer"
+          class="form-select form-select"
+          aria-label=".form-select example"
+          id="selectCompany"
         >
-          {{ customer.company }}
-        </option>
-      </select>
-      <label for="selectCompany">고객사를 선택하세요!</label>
-      <button
-        class="btn btn-lg btn-secondary"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdropCustomers"
-      >
-        고객사 관리
-      </button>
+          <option
+            :key="customer.code"
+            v-for="customer in customers"
+            :value="customer.company"
+          >
+            {{ customer.company }}
+          </option>
+        </select>
+        <label for="selectCompany">고객사를 선택하세요!</label>
+        <button
+          class="btn btn-lg btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdropCustomers"
+        >
+          고객사 관리
+        </button>
+      </div>
+      <div>
+        <div class="btn-group col-3 mx-auto">
+          <button @click="$refs.file.click()" class="btn btn-outline-secondary">
+            엑셀 불러오기
+          </button>
+          <input
+            type="file"
+            style="display: none"
+            ref="file"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            @change="xlsxMount"
+          />
+          <button
+            :disabled="resultXlsxToJson.length === 0"
+            @click="xlsxUnmount"
+            class="btn btn-outline-secondary"
+          >
+            엑셀 해제하기
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="p-5 text-center">
@@ -77,25 +100,6 @@
         class="btn btn-outline-primary"
       >
         Packing List
-      </button>
-    </div>
-    <div class="btn-group col-3 mx-auto">
-      <button @click="$refs.file.click()" class="btn btn-outline-primary">
-        엑셀 불러오기
-      </button>
-      <input
-        type="file"
-        style="display: none"
-        ref="file"
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-        @change="readFile"
-      />
-      <button
-        :disabled="resultXlsxToJson.length === 0"
-        @click="xlsxUnmount"
-        class="btn btn-outline-primary"
-      >
-        엑셀 해제하기
       </button>
     </div>
   </div>
@@ -425,15 +429,20 @@ export default {
         })
       }
       reader.readAsBinaryString(files[0])
-      this.resultXlsxToJson = temp
+      // this.resultXlsxToJson = temp
       this.$refs.file.value = ''
+      return temp
+    },
+    xlsxMount(e) {
+      this.resultXlsxToJson = this.readFile(e)
+      console.log(this.resultXlsxToJson[0])
       this.lotNoFilter()
-      console.log('readFile 실행 완료')
     },
     xlsxUnmount() {
       this.resultXlsxToJson = []
       console.log('xlsxUnmount: ', this.resultXlsxToJson.length)
       this.getMdbServer()
+      this.packingChk = false
     },
     addCustomer() {
       // console.log(this.newCustomer)
@@ -532,8 +541,8 @@ export default {
       this.filteredLotNo = this.resultMdbToJson
     },
     lotNoFilter() {
-      console.log('lotNoFilter 시작')
       if (this.lotNo === '') {
+        console.log('resultXlsxToJson: ', this.resultXlsxToJson[0])
         this.filteredLotNo = this.resultXlsxToJson[0]
         this.packingChk = false
       } else {
@@ -545,8 +554,8 @@ export default {
         }
         this.filteredLotNo = tempFilteredLotNo[0]
         this.packingChk = true
+        this.packingComputed()
       }
-      this.packingComputed()
     },
     lotNoFilterMdb() {
       if (this.lotNo === '' && this.resultXlsxToJson.length === 0) {
