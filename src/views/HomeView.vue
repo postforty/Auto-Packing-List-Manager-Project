@@ -1,36 +1,36 @@
 <template>
-  <div class="py-5 text-center">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="48"
-      height="48"
-      fill="currentColor"
-      class="bi bi-file-earmark-text mb-4"
-      viewBox="0 0 16 16"
-    >
-      <path
-        d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"
-      />
-      <path
-        d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"
-      />
-    </svg>
-    <h2>Packing List 자동 생성</h2>
-  </div>
-  <div class="p-5">
-    <div class="form-floating mb-3">
-      <input
-        v-model="lotNo"
-        type="text"
-        name=""
-        ref="newCustomerModal"
-        id="lotNo"
-        placeholder="로트 번호"
-        class="form-control rounded-3"
-      />
-      <label for="lotNo">로트 번호를 입력하세요!</label>
+  <div>
+    <div class="py-5 text-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="48"
+        height="48"
+        fill="currentColor"
+        class="bi bi-file-earmark-text mb-4"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"
+        />
+        <path
+          d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"
+        />
+      </svg>
+      <h2>Packing List 자동 생성</h2>
     </div>
-    <div>
+    <div class="p-5">
+      <div class="form-floating">
+        <input
+          v-model="lotNo"
+          type="text"
+          name=""
+          ref="newCustomerModal"
+          id="lotNo"
+          placeholder="로트 번호"
+          class="form-control rounded-3"
+        />
+        <label for="lotNo">로트 번호를 입력하세요!</label>
+      </div>
       <div class="input-group form-floating">
         <select
           v-model="selectedCustomer"
@@ -48,302 +48,311 @@
         </select>
         <label for="selectCompany">고객사를 선택하세요!</label>
         <button
-          class="btn btn-lg btn-secondary"
+          class="btn btn-outline-secondary"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdropCustomers"
         >
           고객사 관리
         </button>
-      </div>
-      <div>
-        <div class="btn-group col-3 mx-auto">
-          <button @click="$refs.file.click()" class="btn btn-outline-secondary">
-            엑셀 불러오기
-          </button>
-          <input
-            type="file"
-            style="display: none"
-            ref="file"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            @change="xlsxMount"
-          />
-          <button
-            :disabled="resultXlsxToJson.length === 0"
-            @click="xlsxUnmount"
-            class="btn btn-outline-secondary"
-          >
-            엑셀 해제하기
-          </button>
-        </div>
+        <button @click="$refs.file.click()" class="btn btn-outline-secondary">
+          엑셀 불러오기
+        </button>
+        <input
+          type="file"
+          style="display: none"
+          ref="file"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          @change="xlsxMount"
+        />
+        <button
+          :disabled="resultXlsxToJson.length === 0"
+          @click="xlsxUnmount"
+          class="btn btn-outline-secondary"
+        >
+          엑셀 해제하기
+        </button>
       </div>
     </div>
-  </div>
-  <div class="p-5 text-center">
-    <div class="btn-group col-6 mx-auto">
-      <!-- <button @click="$refs.file.click()" class="btn btn-outline-primary">
+    <div class="p-5 text-center">
+      <div class="btn-group col-6 mx-auto">
+        <!-- <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
       </button> -->
-      <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
-        조회
-      </button>
-      <!-- <input
+        <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
+          조회하기
+        </button>
+        <!-- <input
         type="file"
         style="display: none"
         ref="file"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
         @change="readFile"
       /> -->
-      <button
-        :disabled="packingChk === false"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
-        class="btn btn-outline-primary"
-      >
-        Packing List
-      </button>
+        <button
+          :disabled="packingChk === false"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+          class="btn btn-outline-primary"
+        >
+          Packing List
+        </button>
+      </div>
     </div>
-  </div>
-  <!-- 고객사 관리 모달 -->
-  <div>
-    <slot-modal modalId="staticBackdropCustomers">
-      <template v-slot:title>고객사 관리</template>
-      <template v-slot:body>
-        <div class="modal-body p-5 pt-0">
-          <label for="" class="col-form-label fw-bold mb-0">고객사 추가</label>
-          <div class="form-floating mb-3">
-            <input
-              v-model="newCustomer.code"
-              type="text"
-              name=""
-              ref="newCustomerModal"
-              id="businessNumber"
-              placeholder="000-00-00000"
-              class="form-control rounded-3"
-            />
-            <label for="businessNumber"
-              >사업자 번호를 입력하세요! (예: 000-00-00000)</label
+    <!-- 고객사 관리 모달 -->
+    <div>
+      <slot-modal modalId="staticBackdropCustomers">
+        <template v-slot:title>고객사 관리</template>
+        <template v-slot:body>
+          <div class="modal-body p-5 pt-0">
+            <label for="" class="col-form-label fw-bold mb-0"
+              >고객사 추가</label
             >
+            <div class="form-floating mb-3">
+              <input
+                v-model="newCustomer.code"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+                id="businessNumber"
+                placeholder="000-00-00000"
+                class="form-control rounded-3"
+              />
+              <label for="businessNumber"
+                >사업자 번호를 입력하세요! (예: 000-00-00000)</label
+              >
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                v-model="newCustomer.company"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+                id="companyName"
+                placeholder="고객사 명"
+                class="form-control rounded-3"
+              />
+              <label for="companyName">고객사 명을 입력하세요!</label>
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              @click="addCustomer"
+            >
+              저장
+            </button>
+            <hr class="my-4" />
+            <label for="" class="col-form-label fw-bold mb-0"
+              >고객사 삭제</label
+            >
+            <div class="form-floating mb-3">
+              <input
+                type="search"
+                v-model.trim="searchName"
+                @keyup.enter="getCustomers"
+                id="getCompanyName"
+                placeholder="고객사 명"
+                class="form-control rounded-3"
+              />
+              <label for="getCompanyName">조회할 고객사 명을 입력하세요!</label>
+            </div>
+            <button
+              class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
+              @click="getCustomers"
+            >
+              조회
+            </button>
+            <div
+              v-if="searchName === ''"
+              class="list-group list-group-checkable d-grid gap-2 border-0 w-auto"
+            >
+              <div :key="customer.code" v-for="customer in customers">
+                <div v-if="customer.code !== 'none'">
+                  <input
+                    type="checkbox"
+                    class="list-group-item-check pe-none"
+                    name=""
+                    :id="customer.code"
+                    :value="customer"
+                    @change="customer.isChecked = !customer.isChecked"
+                  /><label
+                    class="list-group-item rounded-3 py-3"
+                    style="text-align: center"
+                    :for="customer.code"
+                  >
+                    {{ customer.company }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              class="list-group list-group-checkable d-grid gap-2 border-0 w-auto"
+            >
+              <div :key="customer.code" v-for="customer in searchCustomers">
+                <div v-if="customer.code !== 'none'">
+                  <input
+                    type="checkbox"
+                    class="list-group-item-check pe-none"
+                    name=""
+                    :id="customer.code"
+                    :value="customer"
+                    @change="customer.isChecked = !customer.isChecked"
+                  />
+                  <label
+                    class="list-group-item rounded-3 py-3"
+                    :for="customer.code"
+                  >
+                    {{ customer.company }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button
+              class="w-100 btn btn-lg rounded-3 btn-danger mt-2"
+              @click="doDelete"
+            >
+              삭제
+            </button>
           </div>
-          <div class="form-floating mb-3">
-            <input
-              v-model="newCustomer.company"
-              type="text"
-              name=""
-              ref="newCustomerModal"
-              id="companyName"
-              placeholder="고객사 명"
-              class="form-control rounded-3"
-            />
-            <label for="companyName">고객사 명을 입력하세요!</label>
-          </div>
-          <button
-            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-            @click="addCustomer"
-          >
-            저장
+        </template>
+        <template v-slot:footer>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
           </button>
-          <hr class="my-4" />
-          <label for="" class="col-form-label fw-bold mb-0">고객사 삭제</label>
-          <div class="form-floating mb-3">
-            <input
-              type="search"
-              v-model.trim="searchName"
-              @keyup.enter="getCustomers"
-              id="getCompanyName"
-              placeholder="고객사 명"
-              class="form-control rounded-3"
-            />
-            <label for="getCompanyName">조회할 고객사 명을 입력하세요!</label>
-          </div>
-          <button
-            class="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-            @click="getCustomers"
-          >
-            조회
-          </button>
-          <div
-            v-if="searchName === ''"
-            class="list-group list-group-checkable d-grid gap-2 border-0 w-auto"
-          >
-            <div :key="customer.code" v-for="customer in customers">
-              <div v-if="customer.code !== 'none'">
+        </template>
+      </slot-modal>
+    </div>
+    <!-- Packing List 모달 -->
+    <div>
+      <slot-modal modalId="staticBackdrop">
+        <template v-slot:title>Packing List</template>
+        <template v-slot:body>
+          <div id="printArea">
+            <div class="modal-body p-3 pt-0">
+              <div>
+                <label for="packingDate" class="col-form-label">날짜:</label>
                 <input
-                  type="checkbox"
-                  class="list-group-item-check pe-none"
-                  name=""
-                  :id="customer.code"
-                  :value="customer"
-                  @change="customer.isChecked = !customer.isChecked"
-                /><label
-                  class="list-group-item rounded-3 py-3"
-                  style="text-align: center"
-                  :for="customer.code"
+                  type="date"
+                  id="packingDate"
+                  class="form-control mb-2"
+                  v-model="nowDate"
+                />
+              </div>
+              <div>
+                <label for="productLotNo" class="col-form-label"
+                  >로트 번호:</label
                 >
-                  {{ customer.company }}
-                </label>
+                <input
+                  type="text"
+                  id="productLotNo"
+                  class="form-control mb-2"
+                  v-model="lotNo"
+                />
+              </div>
+              <div>
+                <label for="packingCompanyName" class="col-form-label"
+                  >고객사:</label
+                >
+                <input
+                  type="text"
+                  id="packingCompanyName"
+                  class="form-control mb-2"
+                  v-model="selectedCustomer"
+                />
+              </div>
+              <div>
+                <label for="productKinds" class="col-form-label">강종:</label>
+                <input
+                  type="text"
+                  id="productKinds"
+                  class="form-control mb-2"
+                  v-model="packingList[0].FIELD1"
+                />
+              </div>
+              <div>
+                <label for="productCharacteristic" class="col-form-label"
+                  >강도:</label
+                >
+                <input
+                  type="text"
+                  id="productCharacteristic"
+                  class="form-control mb-2"
+                  v-model="packingList[0].FIELD4"
+                />
+              </div>
+              <div>
+                <label for="productThickness" class="col-form-label"
+                  >선경:</label
+                >
+                <input
+                  type="text"
+                  id="productThickness"
+                  class="form-control mb-2"
+                  v-model="packingList[0].FIELD3"
+                />
+              </div>
+              <div>
+                <label for="totalCount" class="col-form-label"
+                  >총 수량(EA):</label
+                >
+                <input
+                  type="text"
+                  id="totalCount"
+                  class="form-control mb-2"
+                  v-model="packingList[0].countTotal"
+                />
+              </div>
+              <div>
+                <label for="totalSum" class="col-form-label"
+                  >총 중량(kg):</label
+                >
+                <input
+                  type="text"
+                  id="totalSum"
+                  class="form-control mb-2"
+                  v-model="packingList[0].sumTotal"
+                />
               </div>
             </div>
           </div>
-          <div
-            v-else
-            class="list-group list-group-checkable d-grid gap-2 border-0 w-auto"
-          >
+          <div v-show="BoolDoDeleteShow === true">
+            <label for="">고객사 삭제</label>
             <div :key="customer.code" v-for="customer in searchCustomers">
               <div v-if="customer.code !== 'none'">
                 <input
                   type="checkbox"
-                  class="list-group-item-check pe-none"
                   name=""
-                  :id="customer.code"
+                  id=""
                   :value="customer"
                   @change="customer.isChecked = !customer.isChecked"
                 />
-                <label
-                  class="list-group-item rounded-3 py-3"
-                  :for="customer.code"
-                >
-                  {{ customer.company }}
-                </label>
+                {{ customer.company }}
               </div>
             </div>
+            <button class="btn btn-primary" @click="doDelete">삭제</button>
           </div>
-          <button
-            class="w-100 btn btn-lg rounded-3 btn-danger mt-2"
-            @click="doDelete"
-          >
-            삭제
+        </template>
+        <template v-slot:footer>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
           </button>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-      </template>
-    </slot-modal>
-  </div>
-  <!-- Packing List 모달 -->
-  <div>
-    <slot-modal modalId="staticBackdrop">
-      <template v-slot:title>Packing List</template>
-      <template v-slot:body>
-        <div id="printArea">
-          <div class="modal-body p-3 pt-0">
-            <div>
-              <label for="packingDate" class="col-form-label">날짜:</label>
-              <input
-                type="date"
-                id="packingDate"
-                class="form-control mb-2"
-                v-model="nowDate"
-              />
-            </div>
-            <div>
-              <label for="productLotNo" class="col-form-label"
-                >로트 번호:</label
-              >
-              <input
-                type="text"
-                id="productLotNo"
-                class="form-control mb-2"
-                v-model="lotNo"
-              />
-            </div>
-            <div>
-              <label for="packingCompanyName" class="col-form-label"
-                >고객사:</label
-              >
-              <input
-                type="text"
-                id="packingCompanyName"
-                class="form-control mb-2"
-                v-model="selectedCustomer"
-              />
-            </div>
-            <div>
-              <label for="productKinds" class="col-form-label">강종:</label>
-              <input
-                type="text"
-                id="productKinds"
-                class="form-control mb-2"
-                v-model="packingList[0].FIELD1"
-              />
-            </div>
-            <div>
-              <label for="productCharacteristic" class="col-form-label"
-                >강도:</label
-              >
-              <input
-                type="text"
-                id="productCharacteristic"
-                class="form-control mb-2"
-                v-model="packingList[0].FIELD4"
-              />
-            </div>
-            <div>
-              <label for="productThickness" class="col-form-label">선경:</label>
-              <input
-                type="text"
-                id="productThickness"
-                class="form-control mb-2"
-                v-model="packingList[0].FIELD3"
-              />
-            </div>
-            <div>
-              <label for="totalCount" class="col-form-label"
-                >총 수량(EA):</label
-              >
-              <input
-                type="text"
-                id="totalCount"
-                class="form-control mb-2"
-                v-model="packingList[0].countTotal"
-              />
-            </div>
-            <div>
-              <label for="totalSum" class="col-form-label">총 중량(kg):</label>
-              <input
-                type="text"
-                id="totalSum"
-                class="form-control mb-2"
-                v-model="packingList[0].sumTotal"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-show="BoolDoDeleteShow === true">
-          <label for="">고객사 삭제</label>
-          <div :key="customer.code" v-for="customer in searchCustomers">
-            <div v-if="customer.code !== 'none'">
-              <input
-                type="checkbox"
-                name=""
-                id=""
-                :value="customer"
-                @change="customer.isChecked = !customer.isChecked"
-              />
-              {{ customer.company }}
-            </div>
-          </div>
-          <button class="btn btn-primary" @click="doDelete">삭제</button>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        <button
-          class="btn btn-primary"
-          onclick="printJS({ printable:'printArea', type:'html', header:'Packing List', scanStyles : true })"
-        >
-          인쇄
-        </button>
-        <button class="btn btn-success" @click="doExcel">엑셀다운로드</button>
-      </template>
-    </slot-modal>
-  </div>
-  <div class="p-5">
-    <grid-pagination
-      :headers="headers"
-      :items="filteredLotNo"
-      @click-buttons="handleClickButtons"
-    />
+          <button
+            class="btn btn-primary"
+            onclick="printJS({ printable:'printArea', type:'html', header:'Packing List', scanStyles : true })"
+          >
+            인쇄
+          </button>
+          <button class="btn btn-success" @click="doExcel">엑셀다운로드</button>
+        </template>
+      </slot-modal>
+    </div>
+    <div class="p-5">
+      <p v-show="fileName !== ''">엑셀 파일명 : {{ fileName }}</p>
+      <grid-pagination
+        :headers="headers"
+        :items="filteredLotNo"
+        @click-buttons="handleClickButtons"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -403,7 +412,8 @@ export default {
         { title: '총 수량', key: 'countTotal' },
         { title: '총 중량', key: 'sumTotal' }
       ],
-      packingChk: false
+      packingChk: false,
+      fileName: ''
     }
   },
   setup() {},
@@ -430,19 +440,23 @@ export default {
       }
       reader.readAsBinaryString(files[0])
       // this.resultXlsxToJson = temp
+      this.fileName = this.$refs.file.value
+      this.fileName = this.fileName.slice(this.fileName.lastIndexOf('\\') + 1)
+      // console.log(this.fileName)
       this.$refs.file.value = ''
       return temp
     },
     xlsxMount(e) {
       this.resultXlsxToJson = this.readFile(e)
-      console.log(this.resultXlsxToJson[0])
-      this.lotNoFilter()
+      // console.log(this.resultXlsxToJson)
+      this.lotNoFilterMdb()
     },
     xlsxUnmount() {
       this.resultXlsxToJson = []
-      console.log('xlsxUnmount: ', this.resultXlsxToJson.length)
+      // console.log('xlsxUnmount: ', this.resultXlsxToJson.length)
       this.getMdbServer()
       this.packingChk = false
+      this.fileName = ''
     },
     addCustomer() {
       // console.log(this.newCustomer)
@@ -542,7 +556,7 @@ export default {
     },
     lotNoFilter() {
       if (this.lotNo === '') {
-        console.log('resultXlsxToJson: ', this.resultXlsxToJson[0])
+        // console.log('resultXlsxToJson: ', this.resultXlsxToJson[0])
         this.filteredLotNo = this.resultXlsxToJson[0]
         this.packingChk = false
       } else {
