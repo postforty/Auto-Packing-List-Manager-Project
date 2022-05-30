@@ -439,15 +439,13 @@ export default {
         })
       }
       reader.readAsBinaryString(files[0])
-      // this.resultXlsxToJson = temp
+      this.resultXlsxToJson = temp
       this.fileName = this.$refs.file.value
       this.fileName = this.fileName.slice(this.fileName.lastIndexOf('\\') + 1)
-      // console.log(this.fileName)
       this.$refs.file.value = ''
-      return temp
     },
     xlsxMount(e) {
-      this.resultXlsxToJson = this.readFile(e)
+      this.readFile(e)
       // console.log(this.resultXlsxToJson)
       this.lotNoFilter()
     },
@@ -556,7 +554,7 @@ export default {
     },
     lotNoFilter() {
       if (this.lotNo === '') {
-        console.log('resultXlsxToJson: ', this.resultXlsxToJson)
+        // console.log('resultXlsxToJson: ', this.resultXlsxToJson)
         this.filteredLotNo = this.resultXlsxToJson[0]
         this.packingChk = false
       } else {
