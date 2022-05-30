@@ -449,7 +449,7 @@ export default {
     xlsxMount(e) {
       this.resultXlsxToJson = this.readFile(e)
       // console.log(this.resultXlsxToJson)
-      this.lotNoFilterMdb()
+      this.lotNoFilter()
     },
     xlsxUnmount() {
       this.resultXlsxToJson = []
@@ -556,7 +556,7 @@ export default {
     },
     lotNoFilter() {
       if (this.lotNo === '') {
-        // console.log('resultXlsxToJson: ', this.resultXlsxToJson[0])
+        console.log('resultXlsxToJson: ', this.resultXlsxToJson)
         this.filteredLotNo = this.resultXlsxToJson[0]
         this.packingChk = false
       } else {
