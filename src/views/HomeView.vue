@@ -427,27 +427,32 @@ export default {
   methods: {
     // xlsx to json
     readFile(e) {
-      let files = e.target.files
-      let reader = new FileReader()
-      const temp = []
-      reader.onload = function (e) {
-        let data = e.target.result
-        let workBook = XLSX.read(data, { type: 'binary' })
-        workBook.SheetNames.forEach(function (sheetName) {
-          let xlsxToJson = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
-          temp.push(xlsxToJson)
-        })
-      }
-      reader.readAsBinaryString(files[0])
-      this.resultXlsxToJson = temp
+      return new Promise((resolve, reject) => {
+        let files = e.target.files
+        let reader = new FileReader()
+        const temp = []
+        reader.readAsBinaryString(files[0])
+        reader.onload = function (e) {
+          let data = e.target.result
+          let workBook = XLSX.read(data, { type: 'binary' })
+          workBook.SheetNames.forEach(function (sheetName) {
+            let xlsxToJson = XLSX.utils.sheet_to_json(
+              workBook.Sheets[sheetName]
+            )
+            temp.push(xlsxToJson)
+          })
+          resolve(temp)
+        }
+      })
+    },
+    xlsxMount(e) {
+      this.readFile(e).then((res) => {
+        this.resultXlsxToJson = res
+        this.lotNoFilter()
+      })
       this.fileName = this.$refs.file.value
       this.fileName = this.fileName.slice(this.fileName.lastIndexOf('\\') + 1)
       this.$refs.file.value = ''
-    },
-    xlsxMount(e) {
-      this.readFile(e)
-      // console.log(this.resultXlsxToJson)
-      this.lotNoFilter()
     },
     xlsxUnmount() {
       this.resultXlsxToJson = []
