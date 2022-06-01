@@ -2,7 +2,6 @@
 import express from 'express'
 const app = express()
 import fs from 'fs'
-// import { readFileSync } from 'fs'
 import cors from 'cors'
 import MDBReader from 'mdb-reader'
 // const express = require('express')
@@ -65,4 +64,9 @@ app.get('/mdb', (req, res) => {
 
   // console.log(table.getData())
   res.send(table.getData())
+})
+
+app.get('/mdbpath', (req, res) => {
+  const mdbpath = fs.readFileSync('./data/mdbpath.txt')
+  res.send(mdbpath)
 })

@@ -82,6 +82,19 @@
         >
           엑셀 해제하기
         </button>
+        <button
+          @click="$refs.mdbFile.click()"
+          class="btn btn-outline-secondary"
+        >
+          MDB 경로 찾기
+        </button>
+        <input
+          type="file"
+          style="display: none"
+          ref="mdbFile"
+          accept=".mdb"
+          @change="setMdbPath"
+        />
       </div>
     </div>
     <div class="p-5 text-center">
@@ -424,7 +437,8 @@ export default {
         { title: '총 중량', key: 'sumTotal' }
       ],
       packingChk: false,
-      fileName: ''
+      fileName: '',
+      mdbPath: ''
     }
   },
   setup() {},
@@ -614,6 +628,14 @@ export default {
         this.packingChk = true
       }
       this.packingComputed()
+    },
+    async getMdbPath() {
+      this.mdbPath = await this.$get('/mdbpath')
+      console.log(this.mdbPath)
+    },
+    async setMdbPath() {
+      console.log(this.$refs.mdbFile.value)
+      this.getMdbPath()
     }
   }
 }
