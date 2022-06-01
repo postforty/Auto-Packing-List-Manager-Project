@@ -635,7 +635,10 @@ export default {
     },
     async setMdbPath() {
       console.log(this.$refs.mdbFile.value)
-      this.getMdbPath()
+      this.mdbPath = this.$refs.mdbFile.value
+      console.log(this.mdbPath)
+      await this.$post('/mdbpath', this.mdbPath)
+      // this.getMdbPath()
     }
   }
 }

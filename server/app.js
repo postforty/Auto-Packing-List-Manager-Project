@@ -70,3 +70,19 @@ app.get('/mdbpath', (req, res) => {
   const mdbpath = fs.readFileSync('./data/mdbpath.txt')
   res.send(mdbpath)
 })
+
+app.post('/mdbpath', (req, res) => {
+  fs.writeFile(
+    './data/mdbpath.txt',
+    JSON.stringify(req.body),
+    'utf8',
+    (err) => {
+      if (err) {
+        throw err
+      }
+      // const data = fs.readFileSync('./data/customers.json', 'utf-8')
+      // console.log(data)
+    }
+  )
+  res.send('Ok')
+})
