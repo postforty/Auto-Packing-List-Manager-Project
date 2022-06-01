@@ -1,5 +1,16 @@
 <template>
-  <div>mdb경로 설정</div>
+  <div>
+    <button @click="$refs.mdbFile.click()" class="btn btn-outline-secondary">
+      MDB 경로 찾기
+    </button>
+    <input
+      type="file"
+      style="display: none"
+      ref="mdbFile"
+      accept=".mdb"
+      @change="setMdbPath"
+    />
+  </div>
 </template>
 <script>
 export default {
@@ -15,7 +26,7 @@ export default {
   unmounted() {},
   methods: {
     setMdbPath() {
-      console.log('mdb경로설정')
+      console.log(this.$refs.mdbFile.value)
     }
   }
 }
