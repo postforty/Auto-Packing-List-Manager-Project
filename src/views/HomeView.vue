@@ -1,5 +1,16 @@
 <template>
   <div>
+    <div>
+      <a
+        href="/setmdbpath"
+        role="button"
+        tabindex="0"
+        target="_top"
+        aria-expanded="false"
+      >
+        <span style="color: grey"><i class="fa fa-cog fa-spin fa-fw"></i></span>
+      </a>
+    </div>
     <div class="py-5 text-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -470,21 +481,37 @@ export default {
       this.postCustomersServer()
     },
     doDelete() {
-      this.customers = this.customers.filter((customer) => !customer.isChecked)
-      // console.log('doDeleteFilter: ', this.customers)
-      // this.exportTextFile()
-      this.postCustomersServer()
+      this.$swal({
+        title: '정말 삭제하시겠습니까?',
+        text: '삭제된 데이터는 복원되지 않습니다.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: '취소',
+        confirmButtonText: '삭제'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.customers = this.customers.filter(
+            (customer) => !customer.isChecked
+          )
+          // console.log('doDeleteFilter: ', this.customers)
+          // this.exportTextFile()
+          this.postCustomersServer()
 
-      // let tempCustomers = []
-      // this.customers.forEach((customer) => {
-      //   if (!customer.isChecked) {
-      //     tempCustomers.push(customer)
-      //   }
-      // })
-      // this.customers = tempCustomers
-      // tempCustomers = []
+          // let tempCustomers = []
+          // this.customers.forEach((customer) => {
+          //   if (!customer.isChecked) {
+          //     tempCustomers.push(customer)
+          //   }
+          // })
+          // this.customers = tempCustomers
+          // tempCustomers = []
 
-      this.searchName = ''
+          this.searchName = ''
+          this.$swal('고객사가 삭제되었습니다.')
+        }
+      })
     },
     addCustomerShow() {
       if (this.BoolAddCustomerShow === false) {
