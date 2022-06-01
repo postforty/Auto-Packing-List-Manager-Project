@@ -1,15 +1,16 @@
 <template>
   <div>
     <div>
-      <a
-        href="/setmdbpath"
-        role="button"
-        tabindex="0"
-        target="_top"
-        aria-expanded="false"
-      >
-        <span style="color: grey"><i class="fa fa-cog fa-spin fa-fw"></i></span>
-      </a>
+      <span style="color: grey" class="p-5" @click="$refs.mdbFile.click()"
+        ><i class="fa fa-cog fa-spin fa-fw"></i
+      ></span>
+      <input
+        type="file"
+        style="display: none"
+        ref="mdbFile"
+        accept=".mdb"
+        @change="setMdbPath"
+      />
     </div>
     <div class="py-5 text-center">
       <svg
@@ -82,19 +83,6 @@
         >
           엑셀 해제하기
         </button>
-        <button
-          @click="$refs.mdbFile.click()"
-          class="btn btn-outline-secondary"
-        >
-          MDB 경로 찾기
-        </button>
-        <input
-          type="file"
-          style="display: none"
-          ref="mdbFile"
-          accept=".mdb"
-          @change="setMdbPath"
-        />
       </div>
     </div>
     <div class="p-5 text-center">
@@ -633,11 +621,10 @@ export default {
       this.mdbPath = await this.$get('/mdbpath')
       console.log(this.mdbPath)
     },
-    async setMdbPath() {
+    setMdbPath() {
       console.log(this.$refs.mdbFile.value)
-      this.mdbPath = this.$refs.mdbFile.value
-      console.log(this.mdbPath)
-      await this.$post('/mdbpath', this.mdbPath)
+      // this.mdbPath = this.$refs.mdbFile.value
+      // console.log(this.mdbPath)
       // this.getMdbPath()
     }
   }
