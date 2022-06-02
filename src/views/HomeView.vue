@@ -2,7 +2,13 @@
   <div>
     <div>
       <span
-        style="color: grey; position: absolute; right: 0px"
+        style="
+          color: grey;
+          cursor: pointer;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        "
         @click="$refs.mdbFile.click()"
         ><i class="fa fa-cog fa-spin fa-fw"></i
       ></span>
