@@ -8,6 +8,7 @@ import MDBReader from 'mdb-reader'
 // const app = express()
 // const fs = require('fs')
 // const cors = require('cors')
+import bodyParser from 'body-parser'
 
 app.use(
   express.json({
@@ -25,6 +26,9 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions)) // 모든 라우터에 cors 적용
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.text())
 
 // http://localhost:3000
 app.get('/', (req, res) => {
@@ -69,4 +73,13 @@ app.get('/mdb', (req, res) => {
 app.get('/mdbpath', (req, res) => {
   const mdbpath = fs.readFileSync('./data/mdbpath.txt')
   res.send(mdbpath)
+})
+
+app.post('/mdbpath', (req, res) => {
+  fs.writeFileSync('./data/mdbpath.txt', req.body, 'utf8', (err) => {
+    if (err) {
+      throw err
+    }
+  })
+  res.send('Ok')
 })

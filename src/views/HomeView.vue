@@ -621,8 +621,11 @@ export default {
       this.mdbPath = await this.$get('/mdbpath')
       console.log(this.mdbPath)
     },
-    setMdbPath() {
-      console.log(this.$refs.mdbFile.value)
+    async setMdbPath() {
+      // console.log(this.$refs.mdbFile.value)
+      this.mdbPath = 'cors test'
+      console.log(this.mdbPath)
+      await this.$post('/mdbpath', this.mdbPath)
       // this.mdbPath = this.$refs.mdbFile.value
       // console.log(this.mdbPath)
       // this.getMdbPath()
