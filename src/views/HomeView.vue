@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>
-      <span style="color: grey" class="p-5" @click="$refs.mdbFile.click()"
+      <span
+        style="color: grey; position: absolute; right: 0px"
+        @click="$refs.mdbFile.click()"
         ><i class="fa fa-cog fa-spin fa-fw"></i
       ></span>
       <input
