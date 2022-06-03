@@ -38,7 +38,7 @@
         v-model="resultPerPage"
         id="floatingSelect"
         @change="initPaging"
-        style="max-width: 70px"
+        style="max-width: 80px"
       >
         <option value="10">10</option>
         <option value="20">20</option>
