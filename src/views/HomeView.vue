@@ -9,6 +9,19 @@
           top: 5px;
           right: 5px;
         "
+        @click="setMdbPath"
+        ><i class="fa fa-cog fa-spin fa-fw"></i
+      ></span>
+    </div>
+    <!-- <div style="position: sticky; top: 0px">
+      <span
+        style="
+          color: grey;
+          cursor: pointer;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        "
         @click="$refs.mdbFile.click()"
         ><i class="fa fa-cog fa-spin fa-fw"></i
       ></span>
@@ -19,7 +32,7 @@
         accept=".mdb"
         @change="setMdbPath"
       />
-    </div>
+    </div> -->
     <div id="top" class="py-5 text-center">
       <a href="http://localhost:8080/">
         <h2><em>Packing List Manager</em></h2>
@@ -671,13 +684,19 @@ export default {
     },
     async setMdbPath() {
       // console.log(this.$refs.mdbFile.value)
-      this.mdbPath = 'cors test'
-      console.log(this.mdbPath)
-      await this.$post('/mdbpath', this.mdbPath)
+      const mdbPath = 'cors test'
+      console.log(mdbPath)
+      // await this.$post('/mdbpath', this.mdbPath)
+      await this.$post('/mdbpath', mdbPath)
       // this.mdbPath = this.$refs.mdbFile.value
       // console.log(this.mdbPath)
       // this.getMdbPath()
     }
+    // async setMdbPath() {
+    //   await this.$post('/mdbpath', this.mdbPath)
+    //   // this.mdbPath = this.$refs.mdbFile.value
+    //   this.getMdbPath()
+    // }
   }
 }
 </script>

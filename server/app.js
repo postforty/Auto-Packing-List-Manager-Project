@@ -71,8 +71,8 @@ app.get('/mdb', (req, res) => {
 })
 
 app.get('/mdbpath', (req, res) => {
-  const mdbpath = fs.readFileSync('./data/mdbpath.txt')
-  res.send(mdbpath)
+  const mdbPath = fs.readFileSync('./data/mdbpath.txt')
+  res.send(mdbPath)
 })
 
 app.post('/mdbpath', (req, res) => {
@@ -81,5 +81,8 @@ app.post('/mdbpath', (req, res) => {
       throw err
     }
   })
-  res.send('Ok')
+  // res.send('Ok')
+  const mdbPath = fs.readFileSync('./data/mdbpath.txt')
+  console.log(mdbPath)
+  res.send(mdbPath)
 })

@@ -55,7 +55,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      // dataSortKey: ''
+    }
   },
   setup() {},
   created() {},
