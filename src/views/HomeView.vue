@@ -71,10 +71,15 @@
           class="btn btn-outline-secondary"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdropCustomers"
+          style="width: 120pt"
         >
           고객사 관리
         </button>
-        <button @click="$refs.file.click()" class="btn btn-outline-secondary">
+        <button
+          style="width: 120pt"
+          @click="$refs.file.click()"
+          class="btn btn-outline-secondary"
+        >
           엑셀 불러오기
         </button>
         <input
@@ -85,6 +90,7 @@
           @change="xlsxMount"
         />
         <button
+          style="width: 120pt"
           :disabled="resultXlsxToJson.length === 0"
           @click="xlsxUnmount"
           class="btn btn-outline-secondary"
@@ -98,7 +104,11 @@
         <!-- <button @click="$refs.file.click()" class="btn btn-outline-primary">
         엑셀업로드
       </button> -->
-        <button @click="lotNoFilterMdb" class="btn btn-outline-primary">
+        <button
+          style="width: 120pt"
+          @click="lotNoFilterMdb"
+          class="btn btn-outline-primary"
+        >
           조회하기
         </button>
         <!-- <input
@@ -109,6 +119,7 @@
         @change="readFile"
       /> -->
         <button
+          style="width: 120pt"
           :disabled="packingChk === false"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
