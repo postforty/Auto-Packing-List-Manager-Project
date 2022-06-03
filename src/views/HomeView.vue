@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div style="position: sticky; top: 0px">
       <span
         style="
           color: grey;
@@ -20,7 +20,7 @@
         @change="setMdbPath"
       />
     </div>
-    <div class="py-5 text-center">
+    <div id="top" class="py-5 text-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="48"
@@ -36,7 +36,7 @@
           d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"
         />
       </svg>
-      <h2>Packing List 자동 생성</h2>
+      <h2>Packing List Manager</h2>
     </div>
     <div class="p-5">
       <div class="form-floating">
@@ -373,6 +373,31 @@
         @click-buttons="handleClickButtons"
       />
     </div>
+    <div id="down"></div>
+    <div style="position: sticky; bottom: 0px">
+      <a
+        href="#top"
+        style="
+          color: grey;
+          cursor: pointer;
+          position: absolute;
+          bottom: 20px;
+          right: 5px;
+        "
+        ><i class="fa fa-angle-up active"></i
+      ></a>
+      <a
+        href="#down"
+        style="
+          color: grey;
+          cursor: pointer;
+          position: absolute;
+          bottom: 5px;
+          right: 5px;
+        "
+        ><i class="fa fa-angle-down active"></i
+      ></a>
+    </div>
   </div>
 </template>
 <script>
@@ -411,7 +436,7 @@ export default {
         }
       ],
       headers: [
-        { title: '로트번호', key: 'FIELD2' },
+        { title: '로트', key: 'FIELD2' },
         { title: '강종', key: 'FIELD1' },
         { title: '강도', key: 'FIELD4' },
         { title: '선경', key: 'FIELD3' },
@@ -424,7 +449,7 @@ export default {
       nowDate: '',
       headersPackingList: [
         { title: '날짜', key: 'selectedDate' },
-        { title: '로트 번호', key: 'lotNo' },
+        { title: '로트', key: 'lotNo' },
         { title: '고객사', key: 'customer' },
         { title: '강종', key: 'FIELD1' },
         { title: '강도', key: 'FIELD4' },

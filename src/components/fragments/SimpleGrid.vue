@@ -1,17 +1,27 @@
 <template>
-  <div style="overflow-x: auto">
-    <table class="table table-bordered" v-if="items.length > 0">
+  <div style="overflow: auto">
+    <table class="table table-striped" v-if="items.length > 0">
       <thead>
         <tr>
-          <th></th>
-          <th :key="th.key" v-for="th in headers">{{ th.title }}</th>
+          <th style="text-align: center">#</th>
+          <th style="text-align: center" :key="th.key" v-for="th in headers">
+            {{ th.title }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr :key="i" v-for="(item, i) in formattedItems">
-          <td>{{ i + 1 + sliceStart }}</td>
-          <td :key="th.key" v-for="th in headers">
-            <input type="text" v-model="item[th.key]" />
+          <td style="text-align: center">{{ i + 1 + sliceStart }}</td>
+          <td style="text-align: center" :key="th.key" v-for="th in headers">
+            <div v-if="th.key != 'GROSS_WEIGHT'">
+              {{ item[th.key] }}
+            </div>
+            <input
+              size="5"
+              type="text"
+              v-if="th.key === 'GROSS_WEIGHT'"
+              v-model="item[th.key]"
+            />
           </td>
         </tr>
       </tbody>
