@@ -35,25 +35,23 @@
         <template v-slot:title>DB 경로 설정</template>
         <template v-slot:body>
           <div class="modal-body p-5 pt-0">
-            <label for="" class="col-form-label fw-bold mb-0"
-              >CAS 전자저울 mdb 파일의 경로를 작성해 주세요.</label
-            >
+            <label for="" class="col-form-label fw-bold mb-0">현재 경로</label>
             <div class="form-floating mb-3">
               <input
-                v-model="newCustomer.code"
+                v-model="mdbPath"
                 type="text"
                 name=""
                 ref="newCustomerModal"
-                id="businessNumber"
-                placeholder="000-00-00000"
+                id="mdbPath"
+                placeholder=""
                 class="form-control rounded-3"
               />
-              <label for="businessNumber">예) c:\cas\IDCMAINDB.mdb</label>
+              <label for="mdbPath">경로를 수정하세요.</label>
             </div>
           </div>
         </template>
         <template v-slot:footer>
-          <button class="btn btn-primary" @click="addCustomer">저장</button>
+          <button class="btn btn-primary" @click="setMdbPath">저장</button>
           <button class="btn btn-secondary" data-bs-dismiss="modal">
             닫기
           </button>
@@ -712,9 +710,7 @@ export default {
       console.log(this.mdbPath)
     },
     async setMdbPath() {
-      // const mdbPath = this.$refs.mdbFile.value
-      var mdbPath = window.location.pathname
-      this.mdbPath = mdbPath
+      const mdbPath = this.mdbPath
       console.log(mdbPath)
       await this.$post('/mdbpath', { mdbPath })
     }
