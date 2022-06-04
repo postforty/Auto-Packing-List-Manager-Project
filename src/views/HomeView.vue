@@ -9,30 +9,57 @@
           top: 5px;
           right: 5px;
         "
-        @click="setMdbPath"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdropMdbPath"
         ><i class="fa fa-cog fa-spin fa-fw"></i
       ></span>
-    </div>
-    <!-- <div style="position: sticky; top: 0px">
-      <span
-        style="
-          color: grey;
-          cursor: pointer;
-          position: absolute;
-          top: 5px;
-          right: 5px;
-        "
-        @click="$refs.mdbFile.click()"
-        ><i class="fa fa-cog fa-spin fa-fw"></i
-      ></span>
-      <input
+      <!-- <input
         type="file"
         style="display: none"
         ref="mdbFile"
         accept=".mdb"
         @change="setMdbPath"
-      />
-    </div> -->
+      /> -->
+    </div>
+    <!-- mdb 파일 경로 설정 모달 -->
+    <!-- <button
+      class="btn btn-outline-secondary"
+      data-bs-toggle="modal"
+      data-bs-target="#staticBackdropMdbPath"
+      style="width: 120pt"
+    >
+      고객사 관리
+    </button> -->
+    <div>
+      <slot-modal modalId="staticBackdropMdbPath">
+        <template v-slot:title>DB 경로 설정</template>
+        <template v-slot:body>
+          <div class="modal-body p-5 pt-0">
+            <label for="" class="col-form-label fw-bold mb-0"
+              >CAS 전자저울 mdb 파일의 경로를 작성해 주세요.</label
+            >
+            <div class="form-floating mb-3">
+              <input
+                v-model="newCustomer.code"
+                type="text"
+                name=""
+                ref="newCustomerModal"
+                id="businessNumber"
+                placeholder="000-00-00000"
+                class="form-control rounded-3"
+              />
+              <label for="businessNumber">예) c:\cas\IDCMAINDB.mdb</label>
+            </div>
+          </div>
+        </template>
+        <template v-slot:footer>
+          <button class="btn btn-primary" @click="addCustomer">저장</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
+          </button>
+        </template>
+      </slot-modal>
+    </div>
     <div id="top" class="py-5 text-center">
       <a href="http://localhost:8080/">
         <h2><em>Packing List Manager</em></h2>
@@ -491,7 +518,9 @@ export default {
     }
   },
   setup() {},
-  created() {},
+  async created() {
+    await this.getMdbPath()
+  },
   mounted() {
     this.nowDate = new Date().toISOString().substring(0, 10)
     this.getCustomersServer()
@@ -683,14 +712,11 @@ export default {
       console.log(this.mdbPath)
     },
     async setMdbPath() {
-      // console.log(this.$refs.mdbFile.value)
-      const mdbPath = 'cors test'
+      // const mdbPath = this.$refs.mdbFile.value
+      var mdbPath = window.location.pathname
+      this.mdbPath = mdbPath
       console.log(mdbPath)
-      // await this.$post('/mdbpath', this.mdbPath)
-      await this.$post('/mdbpath', mdbPath)
-      // this.mdbPath = this.$refs.mdbFile.value
-      // console.log(this.mdbPath)
-      // this.getMdbPath()
+      await this.$post('/mdbpath', { mdbPath })
     }
     // async setMdbPath() {
     //   await this.$post('/mdbpath', this.mdbPath)

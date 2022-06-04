@@ -40,8 +40,12 @@ app.get('/customers', (req, res) => {
   res.send(customers)
 })
 
-app.post('/customers', (req, res) => {
-  fs.writeFile(
+app.post('/customers', async (req, res) => {
+  // TODO:Network study check!
+  /**
+   * 비동기 처리 필요!
+   */
+  await fs.writeFile(
     './data/customers.json',
     JSON.stringify(req.body),
     'utf8',
@@ -75,14 +79,23 @@ app.get('/mdbpath', (req, res) => {
   res.send(mdbPath)
 })
 
+// app.post('/mdbpath', (req, res) => {
+//   fs.writeFileSync('./data/mdbpath.txt', req.body, 'utf8', (err) => {
+//     if (err) {
+//       throw err
+//     }
+//   })
+//   // res.send('Ok')
+//   const mdbPath = fs.readFileSync('./data/mdbpath.txt')
+//   console.log(mdbPath)
+//   res.send(mdbPath)
+// })
+
 app.post('/mdbpath', (req, res) => {
-  fs.writeFileSync('./data/mdbpath.txt', req.body, 'utf8', (err) => {
+  fs.writeFileSync('./data/mdbpath.txt', req.body.mdbPath, 'utf8', (err) => {
     if (err) {
       throw err
     }
   })
-  // res.send('Ok')
-  const mdbPath = fs.readFileSync('./data/mdbpath.txt')
-  console.log(mdbPath)
-  res.send(mdbPath)
+  res.send('Ok')
 })
