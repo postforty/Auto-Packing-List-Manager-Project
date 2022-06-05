@@ -1,1 +1,1 @@
-c:\
+c:/cas/IDCMAINDB.mdb

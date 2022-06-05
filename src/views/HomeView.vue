@@ -38,7 +38,7 @@
             <label for="" class="col-form-label fw-bold mb-0">현재 경로</label>
             <div class="form-floating mb-3">
               <input
-                v-model="mdbPath"
+                v-model="mdbPathInput"
                 type="text"
                 name=""
                 ref="newCustomerModal"
@@ -52,8 +52,12 @@
         </template>
         <template v-slot:footer>
           <button class="btn btn-primary" @click="setMdbPath">저장</button>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">
-            닫기
+          <button
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            @click="setMdbPathCancel"
+          >
+            취소
           </button>
         </template>
       </slot-modal>
@@ -405,9 +409,6 @@
           </div>
         </template>
         <template v-slot:footer>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">
-            닫기
-          </button>
           <button
             class="btn btn-primary"
             onclick="printJS({ printable:'printArea', type:'html', header:'Packing List', scanStyles : true })"
@@ -415,6 +416,9 @@
             인쇄
           </button>
           <button class="btn btn-success" @click="doExcel">엑셀다운로드</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">
+            닫기
+          </button>
         </template>
       </slot-modal>
     </div>
@@ -512,6 +516,7 @@ export default {
       ],
       packingChk: false,
       fileName: '',
+      mdbPathInput: '',
       mdbPath: ''
     }
   },
@@ -707,18 +712,20 @@ export default {
     },
     async getMdbPath() {
       this.mdbPath = await this.$get('/mdbpath')
-      console.log(this.mdbPath)
+      this.mdbPathInput = this.mdbPath
+      // console.log(this.mdbPath)
     },
     async setMdbPath() {
-      const mdbPath = this.mdbPath
+      const mdbPath = this.mdbPathInput.replace(/(\\)+/g, '/')
       console.log(mdbPath)
+      this.mdbPath = mdbPath
+      this.mdbPathInput = mdbPath
       await this.$post('/mdbpath', { mdbPath })
+      this.$swal('경로가 수정되었습니다.')
+    },
+    setMdbPathCancel() {
+      this.getMdbPath()
     }
-    // async setMdbPath() {
-    //   await this.$post('/mdbpath', this.mdbPath)
-    //   // this.mdbPath = this.$refs.mdbFile.value
-    //   this.getMdbPath()
-    // }
   }
 }
 </script>

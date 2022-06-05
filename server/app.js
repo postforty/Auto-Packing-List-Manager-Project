@@ -61,7 +61,8 @@ app.post('/customers', async (req, res) => {
 })
 
 app.get('/mdb', (req, res) => {
-  const buffer = fs.readFileSync('./data/IDCMAINDB.mdb')
+  const mdbPath = fs.readFileSync('./data/mdbpath.txt')
+  const buffer = fs.readFileSync(mdbPath)
   const reader = new MDBReader(buffer)
 
   reader.getTableNames() // ['Cats', 'Dogs', 'Cars']
