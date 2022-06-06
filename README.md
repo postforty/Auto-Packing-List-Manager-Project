@@ -1,4 +1,4 @@
-# auto_packing
+# Packing List Manager
 
 ## Project setup
 ```
