@@ -1,4 +1,4 @@
-# Packing List Manager
+# Auto Packing List Manager
 
 ## Project setup
 ```
