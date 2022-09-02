@@ -9,6 +9,6 @@
   + 고객사 정보 관리(모달)
   + Packing List 생성, 출력, xlsx 내보내기
   
-+ 사용 기술
++ 기술 스택
   + Vue.js, Bootstrap, Node.js
     
